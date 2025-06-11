@@ -1,16 +1,10 @@
 package com.hrmanager.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "Usuario")
 public class Usuario {
 
     @Id
@@ -20,21 +14,41 @@ public class Usuario {
     private String nombre;
     private String apellidos;
     private String dni;
-
-    @Column(unique = true, nullable = false)
     private String correo;
-
-    @Column(nullable = false)
     private String password;
-
     private String telefono;
     private String direccion;
+
+    @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
-    private Boolean activo = true;
+
+    private Boolean activo;
 
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
+
+    public Usuario() {
+    }
+
+    // Constructor completo
+    public Usuario(Long id, String nombre, String apellidos, String dni, String correo,
+                   String password, String telefono, String direccion, LocalDate fechaNacimiento,
+                   Boolean activo, Rol rol) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.dni = dni;
+        this.correo = correo;
+        this.password = password;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.fechaNacimiento = fechaNacimiento;
+        this.activo = activo;
+        this.rol = rol;
+    }
+
+    // Getters y Setters
 
     public Long getId() {
         return id;

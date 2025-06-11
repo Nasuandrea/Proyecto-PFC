@@ -1,11 +1,10 @@
 package com.hrmanager.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +19,8 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final String SECRET_KEY = "secreto123";
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -28,38 +28,44 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
+        // Excluir rutas públicas como /api/auth/**
+        String path = request.getServletPath();
+        if (path.startsWith("/api/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Extraer el encabezado Authorization: Bearer <token>
         String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String correo = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            String correo;
+            token = authHeader.substring(7); // Quita "Bearer "
+            correo = jwtService.extractUsername(token);
+        }
 
-            try {
-                Claims claims = Jwts.parser()
-                        .setSigningKey(SECRET_KEY)
-                        .parseClaimsJws(token)
-                        .getBody();
-                correo = claims.getSubject();
-            } catch (Exception e) {
-                correo = null;
-            }
+        // Si se obtuvo un correo y no hay autenticación activa en el contexto de seguridad
+        if (correo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(correo);
 
-            if (correo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(correo);
-
-                if (userDetails != null) {
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+            // Validar el token JWT
+            if (jwtService.validateToken(token, userDetails.getUsername())) {
+                // Crear token de autenticación y establecerlo en el contexto
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
+        // Continuar con el filtro
         filterChain.doFilter(request, response);
     }
 }
