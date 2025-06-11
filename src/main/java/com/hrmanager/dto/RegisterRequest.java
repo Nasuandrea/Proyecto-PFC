@@ -3,6 +3,8 @@ package com.hrmanager.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class RegisterRequest {
@@ -13,6 +15,6 @@ public class RegisterRequest {
     private String password;
     private String telefono;
     private String direccion;
-    private String fechaNacimiento; // formato: "yyyy-MM-dd"
+    private LocalDate fechaNacimiento;
     private String rol; // "ADMIN" o "USUARIO"
 }

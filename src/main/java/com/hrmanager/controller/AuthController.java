@@ -1,89 +1,85 @@
 package com.hrmanager.controller;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import com.hrmanager.dto.RegisterRequest;
-import com.hrmanager.model.Rol;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.hrmanager.dto.LoginRequest;
 import com.hrmanager.dto.LoginResponse;
+import com.hrmanager.dto.RegisterRequest;
+import com.hrmanager.model.Rol;
 import com.hrmanager.model.Usuario;
-import com.hrmanager.repository.UsuarioRepository;
 import com.hrmanager.repository.RolRepository;
+import com.hrmanager.repository.UsuarioRepository;
 import com.hrmanager.service.JwtService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
 public class AuthController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtService jwtService;
+    @Value("${jwt.secret}")
+    private String secret;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RolRepository rolRepository;
-
+    public AuthController(UsuarioRepository usuarioRepository,
+                          RolRepository rolRepository,
+                          JwtService jwtService,
+                          PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(loginRequest.getCorreo());
 
         if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(401).body("Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
         }
 
         Usuario usuario = usuarioOpt.get();
         if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
-            return ResponseEntity.status(401).body("Contraseña incorrecta");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
         }
 
         String token = jwtService.generateToken(usuario.getCorreo());
         return ResponseEntity.ok(new LoginResponse(token));
     }
+
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        if (usuarioRepository.findByCorreo(request.getCorreo()).isPresent()) {
-            return ResponseEntity.badRequest().body("El correo ya está registrado");
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest req) {
+        if (usuarioRepository.findByCorreo(req.getCorreo()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El correo ya está en uso.");
         }
 
-        Rol.RolNombre rolNombre;
-        try {
-            rolNombre = Rol.RolNombre.valueOf(request.getRol().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Rol no válido. Usa ADMIN o USUARIO.");
-        }
-
+        Rol.RolNombre rolNombre = Rol.RolNombre.valueOf(req.getRol());
         Rol rol = rolRepository.findByNombre(rolNombre)
-                .orElseGet(() -> rolRepository.save(new Rol(null, rolNombre)));
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombre(request.getNombre());
-        nuevoUsuario.setApellidos(request.getApellidos());
-        nuevoUsuario.setDni(request.getDni());
-        nuevoUsuario.setCorreo(request.getCorreo());
-        nuevoUsuario.setPassword(passwordEncoder.encode(request.getPassword()));
-        nuevoUsuario.setTelefono(request.getTelefono());
-        nuevoUsuario.setDireccion(request.getDireccion());
-        nuevoUsuario.setActivo(true);
-        nuevoUsuario.setRol(rol);
-        nuevoUsuario.setFechaNacimiento(LocalDate.parse(request.getFechaNacimiento()));
+        Usuario nuevo = new Usuario();
+        nuevo.setNombre(req.getNombre());
+        nuevo.setApellidos(req.getApellidos());
+        nuevo.setDni(req.getDni());
+        nuevo.setCorreo(req.getCorreo());
+        nuevo.setPassword(passwordEncoder.encode(req.getPassword()));
+        nuevo.setTelefono(req.getTelefono());
+        nuevo.setDireccion(req.getDireccion());
+        nuevo.setFechaNacimiento(req.getFechaNacimiento());
+        nuevo.setActivo(true);
+        nuevo.setRol(rol);
 
-        usuarioRepository.save(nuevoUsuario);
-        return ResponseEntity.ok("Usuario registrado con éxito");
+        usuarioRepository.save(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado con éxito.");
     }
 }
