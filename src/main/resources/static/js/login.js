@@ -1,35 +1,62 @@
-document.getElementById("login-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("loginForm");
+    const errorMessage = document.getElementById("error");
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const errorMsg = document.getElementById("error-msg");
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    try {
-        const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                correo: email,
-                password: password
-            })
-        });
+        const correo = document.getElementById("correo").value;
+        const password = document.getElementById("password").value;
 
-        if (!response.ok) {
-            throw new Error("Credenciales incorrectas");
+        try {
+            // 1. Llamada a /api/auth/login para obtener el token
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ correo, password })
+            });
+
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(text || "Credenciales incorrectas");
+            }
+
+            const data = await response.json();
+            const token = data.token;
+
+            // 2. Guardar token en localStorage
+            localStorage.setItem("token", token);
+
+            // 3. Obtener los datos del usuario
+            const meResponse = await fetch("http://localhost:8080/api/usuario/me", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!meResponse.ok) {
+                throw new Error("Error al obtener datos del usuario");
+            }
+
+            const usuario = await meResponse.json();
+            const rol = usuario.rol.nombre;
+
+            // 4. Redirigir según rol
+            if (rol === "ADMIN") {
+                window.location.href = "dashboard.html";
+            } else if (rol === "USUARIO") {
+                window.location.href = "parteHoras.html";
+            } else {
+                throw new Error("Rol desconocido");
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            errorMessage.textContent = error.message || "Error al iniciar sesión";
         }
-
-        const data = await response.json();
-        const token = data.token;
-
-        // Guardar el token en localStorage
-        localStorage.setItem("jwt", token);
-
-        // Redirigir al dashboard
-        window.location.href = "dashboard.html";
-    } catch (error) {
-        errorMsg.textContent = error.message;
-    }
+    });
 });
+

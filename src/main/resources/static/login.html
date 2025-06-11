@@ -2,20 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesión - HR Manager</title>
+    <title>HR Manager - Iniciar Sesión</title>
     <link rel="stylesheet" href="css/LoginStyles.css">
 </head>
 <body>
 <div class="login-container">
-    <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-        <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <button type="submit">Entrar</button>
-        <p class="error" id="error-msg"></p>
-    </form>
+<h2>Iniciar sesión</h2>
+<form id="loginForm">
+    <input type="email" id="correo" placeholder="Correo" required><br>
+    <input type="password" id="password" placeholder="Contraseña" required><br>
+    <button type="submit">Iniciar sesión</button>
+</form>
+    <p id="error" style="color:red;"></p>
 </div>
 
+
+
 <script src="js/login.js"></script>
+
 </body>
 </html>
+
