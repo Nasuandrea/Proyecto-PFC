@@ -3,58 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>HR Manager - Dashboard</title>
-   <!-- <link rel="stylesheet" href="css/LoginStyles.css"> -->
+    <link rel="stylesheet" href="css/dashboardStyles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            margin: 0;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 220px;
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .sidebar a {
-            display: block;
-            color: white;
-            padding: 12px 20px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        .sidebar a:hover {
-            background-color: #34495e;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 30px;
-        }
+
     </style>
 </head>
 <body>
-
 <div class="sidebar">
     <h2>HR Manager</h2>
-    <a href="parteHoras.html">Parte Horas</a>
-    <a href="parteAusencias.html">Parte Ausencias</a>
-    <a href="trabajadoresAdmin.html">Trabajadores</a>
-    <a href="proyectosAdmin.html">Proyectos</a>
-    <a href="ausenciasAdmin.html">Ausencias</a>
-    <a href="historialTrabajador.html">Historial Trabajador</a>
-    <a href="historialProyecto.html">Historial Proyecto</a>
+    <a href="parteHoras.html" class="comun">Parte Horas</a>
+    <a href="parteAusencias.html" class="comun">Parte Ausencias</a>
+    <a href="trabajadoresAdmin.html" class="admin">Trabajadores</a>
+    <a href="proyectosAdmin.html" class="admin">Proyectos</a>
+    <a href="ausenciasAdmin.html" class="admin">Ausencias</a>
+    <a href="historialTrabajador.html" class="admin">Historial Trabajador</a>
+    <a href="historialProyecto.html" class="admin">Historial Proyecto</a>
     <a href="login.html">Cerrar Sesión</a>
 </div>
 
 <div class="main-content">
-    <h1>Bienvenido al panel de HR Manager</h1>
-    <p>Selecciona una opción del menú para empezar.</p>
+    <h1>Bienvenid@ al panel de HR Manager</h1>
+    <p id="mensaje-usuario">Cargando datos...</p>
 </div>
 
+<script src="js/dashboard.js"></script>
 </body>
 </html>

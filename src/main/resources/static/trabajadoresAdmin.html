@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Manager - Trabajadores</title>
+    <link rel="stylesheet" href="css/trabajadoresStyles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="sidebar">
+    <h2 id="userHeader">Usuario (ROL)</h2>
+    <a href="parteHoras.html">Parte Horas</a>
+    <a href="parteAusencias.html">Parte Ausencias</a>
+    <a href="trabajadoresAdmin.html">Trabajadores</a>
+    <a href="proyectosAdmin.html">Proyectos</a>
+    <a href="ausenciasAdmin.html">Ausencias</a>
+    <a href="historialTrabajador.html">Historial Trabajador</a>
+    <a href="historialProyecto.html">Historial Proyecto</a>
+    <a href="login.html">Cerrar Sesión</a>
+</div>
+
+<div class="main-content">
+    <div class="contenedor-principal">
+        <h1 id="formTitle">Trabajador</h1>
+
+        <form id="crearUsuarioForm" class="styled-form">
+            <input type="hidden" id="usuarioId">
+
+            <div class="form-row">
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <input type="text" id="apellidos" placeholder="Apellidos" required>
+            </div>
+            <div class="form-row">
+                <input type="text" id="dni" placeholder="DNI" required>
+                <input type="email" id="correo" placeholder="Correo electrónico" required>
+            </div>
+            <div class="form-row">
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <input type="text" id="telefono" placeholder="Teléfono">
+            </div>
+            <div class="form-row">
+                <input type="text" id="direccion" placeholder="Dirección">
+                <input type="date" id="fechaNacimiento">
+            </div>
+            <div class="form-row">
+                <select id="rol">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USUARIO">USUARIO</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <button type="submit" id="guardarBtn">Crear usuario</button>
+                <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
+            </div>
+        </form>
+
+        <div class="lista-trabajadores">
+            <h3>Lista de Trabajadores</h3>
+            <ul id="listaUsuarios"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="js/trabajadores.js"></script>
+</body>
+</html>
+

@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String correo = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7); // Quita "Bearer "
+            token = authHeader.substring(7);
             correo = jwtService.extractUsername(token);
         }
 
@@ -64,8 +64,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
-        // Continuar con el filtro
+        System.out.println("Token recibido: " + token);
+        System.out.println("Usuario autenticado: " + correo);
         filterChain.doFilter(request, response);
     }
 }
