@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Manager - Proyectos</title>
+    <link rel="stylesheet" href="css/proyectosStyles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="sidebar">
+    <h2 id="userHeader">Usuario (ROL)</h2>
+    <a href="parteHoras.html">Parte Horas</a>
+    <a href="parteAusencias.html">Parte Ausencias</a>
+    <a href="trabajadoresAdmin.html">Trabajadores</a>
+    <a href="proyectosAdmin.html">Proyectos</a>
+    <a href="ausenciasAdmin.html">Ausencias</a>
+    <a href="historialTrabajador.html">Historial Trabajador</a>
+    <a href="historialProyecto.html">Historial Proyecto</a>
+    <a href="login.html">Cerrar Sesión</a>
+</div>
+
+<div class="main-content">
+    <div class="contenedor-principal">
+        <h1 id="formTitle">Gestionar Proyectos</h1>
+
+        <form id="crearProyectoForm" class="styled-form">
+            <input type="hidden" id="proyectoId">
+
+            <div class="form-row">
+                <input type="text" id="nombre" placeholder="Nombre del Proyecto" required>
+                <input type="text" id="descripcion" placeholder="Descripción" required>
+            </div>
+            <div class="form-row">
+                <input type="date" id="fechaInicio" placeholder="Fecha de Inicio" required>
+                <input type="date" id="fechaFin" placeholder="Fecha de Fin" required>
+            </div>
+            <div class="form-row">
+                <button type="submit" id="guardarBtn">Crear Proyecto</button>
+                <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
+            </div>
+        </form>
+
+        <div class="lista-proyectos">
+            <h3>Lista de Proyectos</h3>
+            <ul id="listaProyectos"></ul>
+        </div>
+    </div>
+</div>
+
+<script src="js/proyectos.js"></script>
+</body>
+</html>
+

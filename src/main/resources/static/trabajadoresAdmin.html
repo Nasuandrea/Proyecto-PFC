@@ -21,8 +21,9 @@
 
 <div class="main-content">
     <div class="contenedor-principal">
-        <h1 id="formTitle">Trabajador</h1>
+        <h1 id="formTitle">Gestionar Trabajadores</h1>
 
+        <!-- Formulario para crear o editar trabajador -->
         <form id="crearUsuarioForm" class="styled-form">
             <input type="hidden" id="usuarioId">
 
@@ -48,12 +49,27 @@
                     <option value="USUARIO">USUARIO</option>
                 </select>
             </div>
+
+            <!-- Campo para seleccionar proyectos disponibles -->
+            <div class="form-row">
+                <select id="proyectosDisponibles">
+                    <option value="">Seleccionar Proyecto</option>
+                    <!-- Proyectos serán cargados aquí -->
+                </select>
+            </div>
+
             <div class="form-row">
                 <button type="submit" id="guardarBtn">Crear usuario</button>
                 <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
             </div>
         </form>
 
+        <!-- Cuadro de búsqueda de trabajadores -->
+        <div class="search-box">
+            <input type="text" id="searchTrabajadores" placeholder="Buscar trabajador por nombre, apellidos o ID" />
+        </div>
+
+        <!-- Lista de trabajadores -->
         <div class="lista-trabajadores">
             <h3>Lista de Trabajadores</h3>
             <ul id="listaUsuarios"></ul>

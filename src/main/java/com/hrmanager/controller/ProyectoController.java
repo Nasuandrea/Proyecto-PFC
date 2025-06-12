@@ -1,59 +1,97 @@
 package com.hrmanager.controller;
 
 import com.hrmanager.model.Proyecto;
+import com.hrmanager.model.Usuario;
 import com.hrmanager.repository.ProyectoRepository;
+import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/proyecto")
-@CrossOrigin
+@RequestMapping("/api/proyectos")
 public class ProyectoController {
 
     @Autowired
     private ProyectoRepository proyectoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    // Obtener todos los proyectos
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<Proyecto> getAll() {
-        return proyectoRepository.findAll();
+    public ResponseEntity<?> getAllProyectos() {
+        return ResponseEntity.ok(proyectoRepository.findAll());
     }
 
+    // Obtener un proyecto por ID
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Proyecto> getById(@PathVariable Long id) {
-        return proyectoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getProyectoById(@PathVariable Long id) {
+        Optional<Proyecto> proyecto = proyectoRepository.findById(id);
+        return proyecto.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Crear un nuevo proyecto
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public Proyecto create(@RequestBody Proyecto proyecto) {
-        return proyectoRepository.save(proyecto);
+    public ResponseEntity<Proyecto> createProyecto(@RequestBody Proyecto proyecto) {
+        return ResponseEntity.ok(proyectoRepository.save(proyecto));
     }
 
+    // Actualizar un proyecto existente
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Proyecto> update(@PathVariable Long id, @RequestBody Proyecto updated) {
-        return proyectoRepository.findById(id).map(p -> {
-            p.setNombre(updated.getNombre());
-            p.setDescripcion(updated.getDescripcion());
-            p.setFechaInicio(updated.getFechaInicio());
-            p.setFechaFin(updated.getFechaFin());
-            p.setHorasEstimadas(updated.getHorasEstimadas());
-            return ResponseEntity.ok(proyectoRepository.save(p));
+    public ResponseEntity<Proyecto> updateProyecto(@PathVariable Long id, @RequestBody Proyecto proyectoActualizado) {
+        return proyectoRepository.findById(id).map(proyecto -> {
+            proyecto.setNombre(proyectoActualizado.getNombre());
+            proyecto.setDescripcion(proyectoActualizado.getDescripcion());
+            proyecto.setFechaInicio(proyectoActualizado.getFechaInicio());
+            proyecto.setFechaFin(proyectoActualizado.getFechaFin());
+            return ResponseEntity.ok(proyectoRepository.save(proyecto));
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    // Eliminar un proyecto
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void delete(@PathVariable Long id) {
-        proyectoRepository.deleteById(id);
+    public ResponseEntity<Void> deleteProyecto(@PathVariable Long id) {
+        if (proyectoRepository.existsById(id)) {
+            proyectoRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Asignar un trabajador a un proyecto
+    @PostMapping("/{proyectoId}/trabajadores/{usuarioId}")
+    public ResponseEntity<Proyecto> addTrabajadorToProyecto(@PathVariable Long proyectoId, @PathVariable Long usuarioId) {
+        Optional<Proyecto> proyectoOpt = proyectoRepository.findById(proyectoId);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+
+        if (proyectoOpt.isPresent() && usuarioOpt.isPresent()) {
+            Proyecto proyecto = proyectoOpt.get();
+            Usuario usuario = usuarioOpt.get();
+            if (!proyecto.getTrabajadores().contains(usuario)) {
+                proyecto.getTrabajadores().add(usuario);
+                return ResponseEntity.ok(proyectoRepository.save(proyecto));
+            } else {
+                return ResponseEntity.badRequest().body(proyecto);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Eliminar un trabajador de un proyecto
+    @DeleteMapping("/{proyectoId}/trabajadores/{usuarioId}")
+    public ResponseEntity<Proyecto> removeTrabajadorFromProyecto(@PathVariable Long proyectoId, @PathVariable Long usuarioId) {
+        Optional<Proyecto> proyectoOpt = proyectoRepository.findById(proyectoId);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+
+        if (proyectoOpt.isPresent() && usuarioOpt.isPresent()) {
+            Proyecto proyecto = proyectoOpt.get();
+            Usuario usuario = usuarioOpt.get();
+            proyecto.getTrabajadores().remove(usuario);
+            return ResponseEntity.ok(proyectoRepository.save(proyecto));
+        }
+        return ResponseEntity.notFound().build();
     }
 }
-

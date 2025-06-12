@@ -10,14 +10,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const lista = document.getElementById("listaUsuarios");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const searchInput = document.getElementById("searchTrabajadores");
+    const proyectosSelect = document.getElementById("proyectosDisponibles");
 
     let editando = false;
 
     cargarUsuarios();
-    cargarUsuarioActual();
+    cargarProyectos();
+
+    // Filtrar trabajadores según el cuadro de búsqueda
+    searchInput.addEventListener("input", () => {
+        const searchValue = searchInput.value.toLowerCase();
+        const items = document.querySelectorAll("#listaUsuarios li");
+
+        items.forEach(item => {
+            const nombre = item.querySelector(".info").textContent.toLowerCase();
+            if (nombre.includes(searchValue)) {
+                item.style.display = "flex";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    });
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const usuario = {
             nombre: document.getElementById("nombre").value,
             apellidos: document.getElementById("apellidos").value,
@@ -27,7 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
             telefono: document.getElementById("telefono").value,
             direccion: document.getElementById("direccion").value,
             fechaNacimiento: document.getElementById("fechaNacimiento").value,
-            rol: document.getElementById("rol").value
+            rol: document.getElementById("rol").value,
+            proyectoId: proyectosSelect.value // Proyecto asignado
         };
 
         try {
@@ -53,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 alert("Usuario creado");
             }
+
             form.reset();
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Crear usuario";
@@ -112,13 +132,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function eliminar(id) {
-        if (confirm("¿Estás seguro de eliminar este usuario?")) {
-            await fetch(`http://localhost:8080/api/usuario/${id}`, {
-                method: "DELETE",
+    async function cargarProyectos() {
+        try {
+            const res = await fetch("http://localhost:8080/api/proyectos", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
-            cargarUsuarios();
+            const proyectos = await res.json();
+            proyectosSelect.innerHTML = `<option value="">Seleccionar Proyecto</option>`; // Limpiar y agregar un valor por defecto
+
+            proyectos.forEach(p => {
+                const option = document.createElement("option");
+                option.value = p.id;
+                option.textContent = `${p.nombre}`;
+                proyectosSelect.appendChild(option);
+            });
+        } catch (err) {
+            console.error("Error al cargar proyectos", err);
+        }
+    }
+
+    async function eliminar(id) {
+        if (confirm("¿Estás seguro de eliminar este usuario?")) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/usuario/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (response.status === 403) {
+                    alert("No tienes permisos para eliminar este usuario.");
+                } else if (response.status === 200) {
+                    alert("Usuario eliminado correctamente.");
+                    cargarUsuarios(); // Recargar la lista de usuarios después de la eliminación
+                } else {
+                    alert("Error al eliminar el usuario. Código de estado: " + response.status);
+                }
+            } catch (err) {
+                alert("Error al intentar eliminar el usuario: " + err.message);
+            }
         }
     }
 
@@ -133,22 +184,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("direccion").value = usuario.direccion || "";
         document.getElementById("fechaNacimiento").value = usuario.fechaNacimiento || "";
         document.getElementById("rol").value = usuario.rol?.nombre || "USUARIO";
+        document.getElementById("proyectosDisponibles").value = usuario.proyectoId || ""; // Asignar el proyecto actual
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";
         editando = true;
     };
-
-    async function cargarUsuarioActual() {
-        try {
-            const res = await fetch("http://localhost:8080/api/usuario/me", {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            const user = await res.json();
-            document.getElementById("userHeader").textContent = `${user.nombre} (${user.rol.nombre})`;
-        } catch (err) {
-            console.warn("No se pudo cargar el usuario actual");
-        }
-    }
 });
+
 
 

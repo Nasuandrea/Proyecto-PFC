@@ -17,9 +17,33 @@ public class UsuarioProyecto {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
+    private Usuario usuarioId;
 
     @ManyToOne
     @JoinColumn(name = "proyecto_id", nullable = false)
-    private Proyecto proyecto;
+    private Proyecto proyectoId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Usuario getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Usuario usuario) {
+        this.usuarioId = usuario;
+    }
+
+    public Proyecto getProyectoId() {
+        return proyectoId;
+    }
+
+    public void setProyectoId(Proyecto proyecto) {
+        this.proyectoId = proyecto;
+    }
 }
