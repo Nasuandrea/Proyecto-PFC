@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             fecha: document.getElementById("fecha").value,
             horasTrabajadas: document.getElementById("horasTrabajadas").value,
             descanso: document.getElementById("descanso").value,
-            proyectoId: proyectoId // Proyecto ID debe ser enviado correctamente
+            proyecto: {id: proyectoId} // Proyecto ID debe ser enviado correctamente
         };
 
         console.log("Parte a enviar:", JSON.stringify(parte));  // Depuración

@@ -44,7 +44,7 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/api/usuario/me", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/**.html").permitAll() // Permitir rutas públicas
-                        .requestMatchers("/api/usuario/**").hasAnyRole("ADMIN")  // Los usuarios y administradores pueden acceder a sus datos
+                        .requestMatchers("/api/usuario/**").hasAnyRole("ADMIN", "USUARIO")  // Los usuarios y administradores pueden acceder a sus datos
                         .requestMatchers("/api/parte/**").hasAnyRole("ADMIN", "USUARIO")  // Los usuarios y administradores pueden acceder a crear/editar partes
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo los administradores pueden acceder a rutas de administración
                         .requestMatchers("/api/ausencias/**").hasRole("ADMIN")  // Solo administradores pueden gestionar ausencias
