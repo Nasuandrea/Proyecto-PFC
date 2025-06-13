@@ -110,6 +110,23 @@ body {
     gap: 10px;
     font-size: 18px;
 }
+/* ======= LISTA DE PROYECTOS ASIGNADOS ======= */
+.lista-proyectos-asignados {
+    margin-top: 20px;
+}
+
+#proyectosAsignados {
+    list-style-type: none;
+    padding: 0;
+}
+
+#proyectosAsignados li {
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
 
 /* ======= RESPONSIVE ======= */
 @media (max-width: 768px) {

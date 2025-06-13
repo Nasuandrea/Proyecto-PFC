@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "Usuario_Proyecto")
+@Table(name = "Usuario_Proyecto",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "proyecto_id"}))
 @Getter
 @Setter
 @NoArgsConstructor

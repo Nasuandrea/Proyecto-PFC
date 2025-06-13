@@ -80,6 +80,31 @@ public class UsuarioController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/{id}/proyectos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Proyecto>> getProyectosUsuario(@PathVariable Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Proyecto> proyectos = usuarioProyectoRepository.findProyectosByUsuario(usuarioOpt.get());
+        return ResponseEntity.ok(proyectos);
+    }
+
+    @GetMapping("/{id}/proyectos/disponibles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Proyecto>> getProyectosDisponibles(@PathVariable Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Proyecto> asignados = usuarioProyectoRepository.findProyectosByUsuario(usuarioOpt.get());
+        List<Long> asignadosIds = asignados.stream().map(Proyecto::getId).toList();
+        List<Proyecto> disponibles = proyectoRepository.findAll().stream()
+                .filter(p -> !asignadosIds.contains(p.getId()))
+                .toList();
+        return ResponseEntity.ok(disponibles);
+    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -105,11 +130,13 @@ public class UsuarioController {
             if (dto.proyectoId != null) {
                 Optional<Proyecto> proyecto = proyectoRepository.findById(dto.proyectoId);
                 if (proyecto.isPresent()) {
-                    // Crear la relación en la tabla Usuario_Proyecto
-                    UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
-                    usuarioProyecto.setUsuarioId(usuario);  // Asignar la instancia de Usuario
-                    usuarioProyecto.setProyectoId(proyecto.get());  // Asignar la instancia de Proyecto
-                    usuarioProyectoRepository.save(usuarioProyecto);
+                    // Crear la relación en la tabla Usuario_Proyecto solo si no existe
+                    if (!usuarioProyectoRepository.existsByUsuarioIdAndProyectoId(usuario, proyecto.get())) {
+                        UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
+                        usuarioProyecto.setUsuarioId(usuario);
+                        usuarioProyecto.setProyectoId(proyecto.get());
+                        usuarioProyectoRepository.save(usuarioProyecto);
+                    }
                 }
             }
 
@@ -145,10 +172,12 @@ public class UsuarioController {
         if (dto.proyectoId != null) {
             Optional<Proyecto> proyecto = proyectoRepository.findById(dto.proyectoId);
             if (proyecto.isPresent()) {
+                if (!usuarioProyectoRepository.existsByUsuarioIdAndProyectoId(savedUsuario, proyecto.get())) {
                 UsuarioProyecto usuarioProyecto = new UsuarioProyecto();
-                usuarioProyecto.setUsuarioId(usuario);
+                usuarioProyecto.setUsuarioId(savedUsuario);
                 usuarioProyecto.setProyectoId(proyecto.get());
                 usuarioProyectoRepository.save(usuarioProyecto);
+            }
             }
         }
 

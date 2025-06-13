@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const guardarBtn = document.getElementById("guardarBtn");
     const searchInput = document.getElementById("searchTrabajadores");
     const proyectosSelect = document.getElementById("proyectosDisponibles");
+    const proyectosAsignadosLista = document.getElementById("proyectosAsignados");
 
     let editando = false;
 
@@ -88,6 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
         editando = false;
         cancelarBtn.style.display = "none";
         guardarBtn.textContent = "Crear usuario";
+        proyectosAsignadosLista.innerHTML = "";
+        cargarProyectos();
     });
 
     async function cargarUsuarios() {
@@ -173,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    window.editar = (usuario) => {
+    window.editar = async (usuario) => {
         document.getElementById("usuarioId").value = usuario.id;
         document.getElementById("nombre").value = usuario.nombre;
         document.getElementById("apellidos").value = usuario.apellidos;
@@ -184,12 +187,36 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("direccion").value = usuario.direccion || "";
         document.getElementById("fechaNacimiento").value = usuario.fechaNacimiento || "";
         document.getElementById("rol").value = usuario.rol?.nombre || "USUARIO";
-        document.getElementById("proyectosDisponibles").value = usuario.proyectoId || ""; // Asignar el proyecto actual
+
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";
         editando = true;
+
+        try {
+            const resAsignados = await fetch(`http://localhost:8080/api/usuario/${usuario.id}/proyectos`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const asignados = await resAsignados.json();
+            proyectosAsignadosLista.innerHTML = "";
+            asignados.forEach(p => {
+                const li = document.createElement("li");
+                li.textContent = p.nombre;
+                proyectosAsignadosLista.appendChild(li);
+            });
+
+            const resDisponibles = await fetch(`http://localhost:8080/api/usuario/${usuario.id}/proyectos/disponibles`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const disponibles = await resDisponibles.json();
+            proyectosSelect.innerHTML = `<option value="">Seleccionar Proyecto</option>`;
+            disponibles.forEach(p => {
+                const option = document.createElement("option");
+                option.value = p.id;
+                option.textContent = p.nombre;
+                proyectosSelect.appendChild(option);
+            });
+        } catch (err) {
+            console.error("Error al cargar proyectos", err);
+        }
     };
 });
-
-
-
