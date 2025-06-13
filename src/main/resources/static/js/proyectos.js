@@ -1,9 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
+    const mensaje = document.getElementById("mensaje-usuario");
+
     if (!token) {
-        alert("No autenticado");
+        mensaje.textContent = "No hay token. Redirigiendo al login...";
         window.location.href = "login.html";
         return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8080/api/usuario/me", {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("No autorizado");
+        }
+
+        const user = await response.json();
+        mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
+
+        // Mostrar u ocultar según el rol
+        if (user.rol.nombre === "ADMIN") {
+            document.querySelectorAll(".admin").forEach(e => e.style.display = "block");
+        } else {
+            document.querySelectorAll(".admin").forEach(e => e.style.display = "none");
+        }
+
+    } catch (error) {
+        mensaje.textContent = "Error de autenticación";
+        console.error(error);
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
     }
 
     const form = document.getElementById("crearProyectoForm");
