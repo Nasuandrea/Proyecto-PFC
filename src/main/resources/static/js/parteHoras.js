@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cargar proyectos disponibles
     async function cargarProyectos() {
         try {
-            const res = await fetch("http://localhost:8080/api/proyectos", {
+            const res = await fetch("http://localhost:8080/api/usuario/mis-proyectos", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const proyectos = await res.json();

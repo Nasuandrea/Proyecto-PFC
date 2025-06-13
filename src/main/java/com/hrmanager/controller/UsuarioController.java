@@ -38,6 +38,22 @@ public class UsuarioController {
         Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);
         return ResponseEntity.ok(usuario);
     }
+    @GetMapping("/mis-proyectos")
+    public ResponseEntity<?> getMisProyectos(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<UsuarioProyecto> relaciones = usuarioProyectoRepository.findByUsuarioId(usuario);
+        List<Proyecto> proyectos = relaciones.stream()
+                .map(UsuarioProyecto::getProyectoId)
+                .toList();
+
+        return ResponseEntity.ok(proyectos);
+    }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
