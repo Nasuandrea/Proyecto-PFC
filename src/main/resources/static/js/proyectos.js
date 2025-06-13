@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function eliminar(id) {
         alert("No es posible eliminar este proyecto.");
+    }
 
     window.editar = (proyecto) => {
         document.getElementById("proyectoId").value = proyecto.id;
