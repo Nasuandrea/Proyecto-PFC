@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/proyectos")
+@CrossOrigin
 public class ProyectoController {
 
     @Autowired
