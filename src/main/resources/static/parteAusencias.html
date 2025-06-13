@@ -19,13 +19,16 @@
     <a href="login.html">Cerrar Sesión</a>
 </div>
 <div class="main-content">
+    <p id="mensaje-usuario">Cargando datos...</p>
     <div class="contenedor-principal">
         <h1>Gestionar Ausencias</h1>
 
         <!-- Formulario de creación de ausencia -->
         <form id="solicitarAusenciaForm" class="styled-form">
             <div class="form-row">
+                <label for="fechaInicio">Fecha Inicio</label>
                 <input type="date" id="fechaInicio" placeholder="Fecha de inicio" required>
+                <label for="fechaFin">Fecha Fin</label>
                 <input type="date" id="fechaFin" placeholder="Fecha de fin" required>
             </div>
             <div class="form-row">
