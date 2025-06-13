@@ -48,6 +48,7 @@ public class ProyectoController {
             proyecto.setDescripcion(proyectoActualizado.getDescripcion());
             proyecto.setFechaInicio(proyectoActualizado.getFechaInicio());
             proyecto.setFechaFin(proyectoActualizado.getFechaFin());
+            proyecto.setHorasEstimadas(proyectoActualizado.getHorasEstimadas());
             return ResponseEntity.ok(proyectoRepository.save(proyecto));
         }).orElse(ResponseEntity.notFound().build());
     }

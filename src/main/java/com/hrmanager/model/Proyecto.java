@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name = "Proyecto")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Proyecto {
@@ -30,6 +29,8 @@ public class Proyecto {
     @Column(name = "horas_estimadas")
     private Integer horasEstimadas;
 
+    @Column(name = "horas_totales")
+    private LocalTime horasTotales;
 
     @ManyToMany
     @JoinTable(
@@ -93,5 +94,13 @@ public class Proyecto {
 
     public void setTrabajadores(List<Usuario> trabajadores) {
         this.trabajadores = trabajadores;
+    }
+
+    public LocalTime getHorasTotales() {
+        return horasTotales;
+    }
+
+    public void setHorasTotales(LocalTime horasTotales) {
+        this.horasTotales = horasTotales;
     }
 }

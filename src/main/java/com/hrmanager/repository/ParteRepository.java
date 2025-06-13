@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ParteRepository extends JpaRepository<Parte, Long> {
     List<Parte> findByUsuarioId(Long usuarioId);
+    List<Parte> findByProyectoId(Long proyectoId);
 }
