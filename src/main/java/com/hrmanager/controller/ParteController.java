@@ -2,8 +2,11 @@ package com.hrmanager.controller;
 
 import com.hrmanager.model.Parte;
 import com.hrmanager.model.Proyecto;
+import com.hrmanager.model.Usuario;
 import com.hrmanager.service.ParteService;
+import com.hrmanager.service.JwtService;
 import com.hrmanager.repository.ProyectoRepository;
+import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,12 @@ public class ParteController {
     @Autowired
     private ProyectoRepository proyectoRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
     // Obtener todos los partes de horas (solo ADMIN)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -32,7 +41,8 @@ public class ParteController {
     // Crear un parte de horas (cualquier usuario)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
-    public Parte create(@RequestBody Parte parte) {
+    public Parte create(@RequestBody Parte parte,
+                        @RequestHeader("Authorization") String authHeader) {
         // Asegúrate de que el proyectoId no sea nulo antes de intentar crear el parte
         if (parte.getProyecto() == null || parte.getProyecto().getId() == null) {
             throw new IllegalArgumentException("El proyecto no puede ser nulo");
@@ -47,8 +57,15 @@ public class ParteController {
             throw new IllegalArgumentException("Proyecto no encontrado");
         }
 
-        // Asignar el proyecto al parte
+        // Obtener el usuario a partir del token
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Asignar el proyecto y el usuario al parte
         parte.setProyecto(proyectoOpt.get());
+        parte.setUsuario(usuario);
 
         return parteService.create(parte);
     }
