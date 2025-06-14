@@ -1,8 +1,11 @@
 package com.hrmanager.controller;
 
 import com.hrmanager.model.Ausencia;
+import com.hrmanager.model.Rol;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.service.AusenciaService;
+import com.hrmanager.service.JwtService;
+import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,15 +20,31 @@ public class ParteAusenciasController {
     @Autowired
     private AusenciaService ausenciaService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private JwtService jwtService;
+
 
     /**
      * Obtener todas las ausencias del usuario o todas las ausencias si es un administrador.
      * @return Lista de ausencias.
      */
     @GetMapping
-    public ResponseEntity<List<Ausencia>> getAllAusencias() {
-        List<Ausencia> ausencias = ausenciaService.getAllAusencias();
-        return ResponseEntity.ok(ausencias);
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
+    public ResponseEntity<List<Ausencia>> getAllAusencias(
+            @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        if (usuario.getRol().getNombre() == Rol.RolNombre.ADMIN) {
+            return ResponseEntity.ok(ausenciaService.getAllAusencias());
+        }
+
+        return ResponseEntity.ok(ausenciaService.getAusenciasByUsuario(usuario));
     }
 
     /**
@@ -34,8 +53,17 @@ public class ParteAusenciasController {
      * @return La ausencia creada.
      */
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Ausencia> crearAusencia(@RequestBody Ausencia ausencia) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
+    public ResponseEntity<Ausencia> crearAusencia(@RequestBody Ausencia ausencia,
+                                                  @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        ausencia.setUsuario(usuario);
+        ausencia.setEstado(Ausencia.Estado.PENDIENTE);
+
         return ResponseEntity.ok(ausenciaService.createAusencia(ausencia));
     }
 
