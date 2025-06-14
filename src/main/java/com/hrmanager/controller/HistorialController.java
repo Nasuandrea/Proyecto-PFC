@@ -24,6 +24,10 @@ public class HistorialController {
     public List<HistorialContrato> getByUsuario(@PathVariable Long usuarioId) {
         return historialContratoRepository.findByContrato_Usuario_Id(usuarioId);
     }
+    @GetMapping("/proyecto/{proyectoId}")
+    public List<HistorialContrato> getByProyecto(@PathVariable Long proyectoId) {
+        return historialContratoRepository.findByProyectoId(proyectoId);
+    }
 
     @PostMapping
     public HistorialContrato create(@RequestBody HistorialContrato historialContrato) {
