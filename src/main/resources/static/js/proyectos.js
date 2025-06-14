@@ -77,12 +77,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                     },
                     body: JSON.stringify(proyecto)
                 });
+                alert("Proyecto actualizado");
+            } else {
+                await fetch("http://localhost:8080/api/proyectos", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(proyecto)
+                });
                 alert("Proyecto creado");
             }
 
             form.reset();
             cancelarBtn.style.display = "none";
-            guardarBtn.textContent = "Crear Proyecto";
+            crearBtn.style.display = "inline-block";
+            guardarBtn.style.display = "none";
+            horasTotalesInput.style.display = "none";
             editando = false;
             cargarProyectos();
         } catch (err) {
@@ -93,8 +105,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelarBtn.addEventListener("click", () => {
         form.reset();
         editando = false;
+        crearBtn.style.display = "inline-block";
+        guardarBtn.style.display = "none";
         cancelarBtn.style.display = "none";
-        guardarBtn.textContent = "Crear Proyecto";
+        horasTotalesInput.style.display = "none";
     });
 
     async function cargarProyectos() {

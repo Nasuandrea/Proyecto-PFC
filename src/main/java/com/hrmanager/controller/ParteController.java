@@ -43,7 +43,7 @@ public class ParteController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
     public Parte create(@RequestBody Parte parte,
                         @RequestHeader("Authorization") String authHeader) {
-        // Asegúrate de que el proyectoId no sea nulo antes de intentar crear el parte
+        // Verificar que el proyectoId no sea nulo antes de intentar crear el parte
         if (parte.getProyecto() == null || parte.getProyecto().getId() == null) {
             throw new IllegalArgumentException("El proyecto no puede ser nulo");
         }
