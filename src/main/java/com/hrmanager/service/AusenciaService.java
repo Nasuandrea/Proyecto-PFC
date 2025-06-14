@@ -47,8 +47,14 @@ public class AusenciaService {
      * @return La ausencia actualizada.
      */
     public Ausencia updateAusencia(Long id, Ausencia ausencia) {
-        Ausencia existingAusencia = ausenciaRepository.findById(id).orElseThrow(() -> new RuntimeException("Ausencia no encontrada"));
+        Ausencia existingAusencia = ausenciaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ausencia no encontrada"));
+
         existingAusencia.setEstado(Ausencia.Estado.valueOf(ausencia.getEstado().name())); // Convertir String a Enum
+
+        // Actualizar el comentario del administrador si se proporciona
+        existingAusencia.setComentarioAdmin(ausencia.getComentarioAdmin());
+
         return ausenciaRepository.save(existingAusencia);
     }
 
@@ -56,9 +62,17 @@ public class AusenciaService {
      * Rechazar una solicitud de ausencia.
      * @param id El ID de la ausencia a rechazar.
      */
-    public void rechazarAusencia(Long id) {
-        Ausencia ausencia = ausenciaRepository.findById(id).orElseThrow(() -> new RuntimeException("Ausencia no encontrada"));
+    public void rechazarAusencia(Long id, Ausencia datosAusencia) {
+        Ausencia ausencia = ausenciaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ausencia no encontrada"));
+
         ausencia.setEstado(Ausencia.Estado.RECHAZADA); // Establecer el estado a RECHAZADA
+
+        // Conservar el comentario del administrador si está presente
+        if (datosAusencia != null) {
+            ausencia.setComentarioAdmin(datosAusencia.getComentarioAdmin());
+        }
+
         ausenciaRepository.save(ausencia);
     }
 

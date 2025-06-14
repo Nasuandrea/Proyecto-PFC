@@ -26,27 +26,28 @@ public class ParteAusenciasController {
     @Autowired
     private JwtService jwtService;
 
-
     /**
-     * Obtener todas las ausencias del usuario o todas las ausencias si es un administrador.
-     * @return Lista de ausencias.
+     * Obtener todas las ausencias del usuario autenticado.
+     * @param authHeader Cabecera con el token JWT.
+     * @return Lista de ausencias del usuario.
      */
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USUARIO')")
-    public ResponseEntity<List<Ausencia>> getAllAusencias(
-            @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<List<Ausencia>> getAllAusencias(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         String correo = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-
-        if (usuario.getRol().getNombre() == Rol.RolNombre.ADMIN) {
-            return ResponseEntity.ok(ausenciaService.getAllAusencias());
+        Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(ausenciaService.getAusenciasByUsuario(usuario));
+        List<Ausencia> ausencias = ausenciaService.getAusenciasByUsuario(usuario);
+        return ResponseEntity.ok(ausencias);
     }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Ausencia>> getAllAusenciasAdmin() {
+        return ResponseEntity.ok(ausenciaService.getAllAusencias());
+    }
     /**
      * Crear una nueva solicitud de ausencia. Solo un ADMIN puede crear ausencias para otros usuarios.
      * @param ausencia La solicitud de ausencia.
@@ -86,8 +87,9 @@ public class ParteAusenciasController {
      */
     @PutMapping("/{id}/rechazar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> rechazarAusencia(@PathVariable Long id) {
-        ausenciaService.rechazarAusencia(id);
+    public ResponseEntity<String> rechazarAusencia(@PathVariable Long id,
+                                                   @RequestBody(required = false) Ausencia ausencia) {
+        ausenciaService.rechazarAusencia(id, ausencia);
         return ResponseEntity.ok("Ausencia rechazada correctamente.");
     }
 
