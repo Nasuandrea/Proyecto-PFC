@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>HR Manager - Contratos</title>
+  <link rel="stylesheet" href="css/trabajadoresStyles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div class="sidebar">
+  <h2>HR Manager</h2>
+  <a href="parteHoras.html" class="comun">Parte Horas</a>
+  <a href="parteAusencias.html" class="comun">Parte Ausencias</a>
+  <a href="trabajadoresAdmin.html" class="admin">Trabajadores</a>
+  <a href="proyectosAdmin.html" class="admin">Proyectos</a>
+  <a href="ausenciasAdmin.html" class="admin">Ausencias</a>
+  <a href="contratosAdmin.html" class="admin">Contratos</a>
+  <a href="documentosAdmin.html" class="admin">Documentos</a>
+  <a href="historialTrabajador.html" class="admin">Historial Trabajador</a>
+  <a href="historialProyecto.html" class="admin">Historial Proyecto</a>
+  <a href="login.html">Cerrar Sesión</a>
+</div>
+
+<div class="main-content">
+  <p id="mensaje-usuario">Cargando datos...</p>
+  <div class="contenedor-principal">
+    <h1>Gestionar Contratos</h1>
+
+    <form id="contratoForm" class="styled-form">
+      <input type="hidden" id="contratoId">
+      <div class="form-row">
+        <select id="usuarioSelect" required></select>
+        <input type="text" id="tipo" placeholder="Tipo de contrato" required>
+      </div>
+      <div class="form-row">
+        <label for="fechaInicio">Fecha Inicio</label>
+        <input type="date" id="fechaInicio" required>
+        <label for="fechaFin">Fecha Fin</label>
+        <input type="date" id="fechaFin">
+      </div>
+      <div class="form-row">
+        <button type="submit" id="guardarBtn">Crear contrato</button>
+        <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
+      </div>
+    </form>
+
+    <div class="lista-contratos">
+      <table id="tablaContratos">
+        <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Tipo</th>
+          <th>Fecha inicio</th>
+          <th>Fecha fin</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="js/contratosAdmin.js"></script>
+</body>
+</html>
