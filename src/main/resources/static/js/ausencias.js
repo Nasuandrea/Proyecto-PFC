@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         try {
-            await fetch("http://localhost:8080/api/ausencia", {
+            await fetch("http://localhost:8080/api/usuario/parteAusencias", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Función para cargar todas las ausencias
     async function cargarAusencias() {
         try {
-            const res = await fetch("http://localhost:8080/api/ausencia", {
+            const res = await fetch("http://localhost:8080/api/usuario/parteAusencias", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const ausencias = await res.json();
@@ -128,7 +128,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const comentarioAdmin = prompt("Introduce un comentario para la ausencia:");
 
-            await fetch(`http://localhost:8080/api/ausencia/${id}?estado=${estado}&comentarioAdmin=${comentarioAdmin}`, {
+            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}?estado=${estado}&comentarioAdmin=
+            ${comentarioAdmin}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`
