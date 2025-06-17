@@ -6,7 +6,7 @@ import com.hrmanager.repository.UsuarioRepository;
 import com.hrmanager.repository.ParteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +21,8 @@ public class UserSecurityService {
     // Método para obtener el usuario autenticado
     public Usuario getAuthenticatedUser() {
         // Obtener el nombre de usuario (correo) desde el SecurityContextHolder
-        String username = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
         return usuarioRepository.findByCorreo(username).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
