@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    let userId = null;
+
     try {
         // Verificamos la información del usuario
         const response = await fetch("http://localhost:8080/api/usuario/me", {
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const user = await response.json();
+        userId = user.id;
         mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
 
         // Mostrar u ocultar elementos del sidebar según el rol
@@ -34,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.querySelectorAll(".user").forEach(e => e.style.display = "block");
         }
 
+        cargarPartes();
     } catch (error) {
         mensaje.textContent = "Error de autenticación";
         console.error(error);
@@ -45,10 +49,86 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
     const proyectoSelect = document.getElementById("proyectoSelect");
+    const tablaBody = document.querySelector("#tablaPartes tbody");
 
     let editando = false;
+    let parteId = null;
 
     cargarProyectos();
+
+    async function cargarPartes() {
+        if (!userId) return;
+        try {
+            const res = await fetch(`http://localhost:8080/api/parte/usuario/${userId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const partes = await res.json();
+            tablaBody.innerHTML = "";
+            partes.forEach(p => {
+                const tr = document.createElement("tr");
+
+                const fechaTd = document.createElement("td");
+                fechaTd.textContent = p.fecha;
+                tr.appendChild(fechaTd);
+
+                const proyectoTd = document.createElement("td");
+                proyectoTd.textContent = p.proyecto?.nombre || "";
+                tr.appendChild(proyectoTd);
+
+                const horasTd = document.createElement("td");
+                horasTd.textContent = p.horasTrabajadas;
+                tr.appendChild(horasTd);
+
+                const descansoTd = document.createElement("td");
+                descansoTd.textContent = p.descanso;
+                tr.appendChild(descansoTd);
+
+                const accionesTd = document.createElement("td");
+                const editarBtn = document.createElement("button");
+                editarBtn.textContent = "Editar";
+                editarBtn.onclick = () => editarParte(p);
+                accionesTd.appendChild(editarBtn);
+
+                const eliminarBtn = document.createElement("button");
+                eliminarBtn.textContent = "Eliminar";
+                eliminarBtn.onclick = () => eliminarParte(p.id);
+                accionesTd.appendChild(eliminarBtn);
+
+                tr.appendChild(accionesTd);
+
+                tablaBody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error("Error al cargar partes", err);
+        }
+    }
+
+    function editarParte(parte) {
+        parteId = parte.id;
+        document.getElementById("parteId").value = parte.id;
+        document.getElementById("fecha").value = parte.fecha;
+        document.getElementById("horasTrabajadas").value = parte.horasTrabajadas;
+        document.getElementById("descanso").value = parte.descanso;
+        proyectoSelect.value = parte.proyecto?.id || "";
+        guardarBtn.textContent = "Guardar cambios";
+        cancelarBtn.style.display = "inline-block";
+        editando = true;
+    }
+
+    async function eliminarParte(id) {
+        if (!confirm("¿Estás seguro de eliminar este parte?")) return;
+        try {
+            await fetch(`http://localhost:8080/api/parte/${id}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            cargarPartes();
+        } catch (err) {
+            console.error("Error al eliminar parte", err);
+        }
+    }
+
+
 
     // Cargar proyectos disponibles
     async function cargarProyectos() {
@@ -122,6 +202,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Crear parte";
             editando = false;
+            parteId = null;
+            cargarPartes();
         } catch (err) {
             console.error("Error en la solicitud:", err);  // Depuración de error
             alert("Error: " + err.message);
@@ -131,6 +213,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelarBtn.addEventListener("click", () => {
         form.reset();
         editando = false;
+        parteId = null;
         cancelarBtn.style.display = "none";
         guardarBtn.textContent = "Crear parte";
     });

@@ -28,7 +28,8 @@ public class ParteService {
         }
 
         // Verificar que el proyecto existe
-        parte.setProyecto(proyectoRepository.findById(parte.getProyecto().getId()).orElseThrow(() -> new RuntimeException("Proyecto no encontrado")));
+        parte.setProyecto(proyectoRepository.findById(parte.getProyecto().getId()).orElseThrow(()
+                -> new RuntimeException("Proyecto no encontrado")));
 
         Parte saved = parteRepository.save(parte);
         updateHorasTotales(saved.getProyecto().getId());
@@ -48,6 +49,32 @@ public class ParteService {
         return parteRepository.findByUsuarioId(usuarioId);
     }
 
+    public Parte update(Long id, Parte datos) {
+        Parte existente = parteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parte no encontrado"));
+
+        existente.setFecha(datos.getFecha());
+        existente.setHorasTrabajadas(datos.getHorasTrabajadas());
+        existente.setDescanso(datos.getDescanso());
+
+        if (datos.getProyecto() != null && datos.getProyecto().getId() != null) {
+            existente.setProyecto(
+                    proyectoRepository.findById(datos.getProyecto().getId())
+                            .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"))
+            );
+        }
+
+        Parte guardado = parteRepository.save(existente);
+        updateHorasTotales(guardado.getProyecto().getId());
+        return guardado;
+    }
+
+    public Parte getById(Long id) {
+        return parteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Parte no encontrado"));
+    }
+
+
     private void updateHorasTotales(Long proyectoId) {
         List<Parte> partes = parteRepository.findByProyectoId(proyectoId);
         LocalTime totalHoras = LocalTime.of(0, 0, 0);
@@ -64,4 +91,5 @@ public class ParteService {
             proyectoRepository.save(proyecto);
         });
     }
+
 }

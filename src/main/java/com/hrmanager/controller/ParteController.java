@@ -70,9 +70,16 @@ public class ParteController {
         return parteService.create(parte);
     }
 
-    // Eliminar un parte de horas (solo ADMIN)
+    // Actualizar un parte de horas
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwnerParte(#id)")
+    public Parte update(@PathVariable Long id, @RequestBody Parte parte) {
+        return parteService.update(id, parte);
+    }
+
+    // Eliminar un parte de horas
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwnerParte(#id)")
     public void delete(@PathVariable Long id) {
         parteService.delete(id);
     }
