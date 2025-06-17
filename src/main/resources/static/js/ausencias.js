@@ -41,9 +41,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "login.html";
     }
     const form = document.getElementById("solicitarAusenciaForm");
-    const listaPendientes = document.getElementById("listaPendientes");
-    const listaAprobadas = document.getElementById("listaAprobadas");
-    const listaRechazadas = document.getElementById("listaRechazadas");
+    const tablaPendientes = document.querySelector("#tablaPendientes tbody");
+    const tablaAprobadas = document.querySelector("#tablaAprobadas tbody");
+    const tablaRechazadas = document.querySelector("#tablaRechazadas tbody");
 
     cargarAusencias();  // Cargar las ausencias cuando se cargue la página
 
@@ -84,38 +84,92 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
             const ausencias = await res.json();
 
-            // Limpiar las listas antes de recargarlas
-            listaPendientes.innerHTML = '';
-            listaAprobadas.innerHTML = '';
-            listaRechazadas.innerHTML = '';
+            // Limpiar las tablas antes de recargarlas
+            tablaPendientes.innerHTML = '';
+            tablaAprobadas.innerHTML = '';
+            tablaRechazadas.innerHTML = '';
 
             ausencias.forEach(a => {
-                const li = document.createElement("li");
-                li.textContent = `${a.tipo} - ${a.motivo} - del ${a.fechaInicio} al ${a.fechaFin}`;
-
-                // Botón para aprobar
                 if (a.estado === "PENDIENTE") {
+                    const tr = document.createElement("tr");
+
+                    const inicioTd = document.createElement("td");
+                    inicioTd.textContent = a.fechaInicio;
+                    tr.appendChild(inicioTd);
+
+                    const finTd = document.createElement("td");
+                    finTd.textContent = a.fechaFin;
+                    tr.appendChild(finTd);
+
+                    const tipoTd = document.createElement("td");
+                    tipoTd.textContent = a.tipo;
+                    tr.appendChild(tipoTd);
+
+                    const motivoTd = document.createElement("td");
+                    motivoTd.textContent = a.motivo;
+                    tr.appendChild(motivoTd);
+
+                    const accionesTd = document.createElement("td");
                     const aprobarBtn = document.createElement("button");
                     aprobarBtn.textContent = "Aceptar";
                     aprobarBtn.onclick = () => actualizarEstado(a.id, "APROBADA");
-                    li.appendChild(aprobarBtn);
+                    accionesTd.appendChild(aprobarBtn);
 
-                    // Botón para denegar
                     const denegarBtn = document.createElement("button");
                     denegarBtn.textContent = "Denegar";
                     denegarBtn.onclick = () => actualizarEstado(a.id, "RECHAZADA");
-                    li.appendChild(denegarBtn);
+                    accionesTd.appendChild(denegarBtn);
 
-                    listaPendientes.appendChild(li);
+                    tr.appendChild(accionesTd);
+                    tablaPendientes.appendChild(tr);
                 }
 
-                // Muestra las aprobadas y rechazadas
                 if (a.estado === "APROBADA") {
-                    listaAprobadas.appendChild(li);
+                    const tr = document.createElement("tr");
+
+                    const inicioTd = document.createElement("td");
+                    inicioTd.textContent = a.fechaInicio;
+                    tr.appendChild(inicioTd);
+
+                    const finTd = document.createElement("td");
+                    finTd.textContent = a.fechaFin;
+                    tr.appendChild(finTd);
+
+                    const tipoTd = document.createElement("td");
+                    tipoTd.textContent = a.tipo;
+                    tr.appendChild(tipoTd);
+
+                    const motivoTd = document.createElement("td");
+                    motivoTd.textContent = a.motivo;
+                    tr.appendChild(motivoTd);
+
+                    tablaAprobadas.appendChild(tr);
                 }
 
                 if (a.estado === "RECHAZADA") {
-                    listaRechazadas.appendChild(li);
+                    const tr = document.createElement("tr");
+
+                    const inicioTd = document.createElement("td");
+                    inicioTd.textContent = a.fechaInicio;
+                    tr.appendChild(inicioTd);
+
+                    const finTd = document.createElement("td");
+                    finTd.textContent = a.fechaFin;
+                    tr.appendChild(finTd);
+
+                    const tipoTd = document.createElement("td");
+                    tipoTd.textContent = a.tipo;
+                    tr.appendChild(tipoTd);
+
+                    const motivoTd = document.createElement("td");
+                    motivoTd.textContent = a.motivo;
+                    tr.appendChild(motivoTd);
+
+                    const comentarioTd = document.createElement("td");
+                    comentarioTd.textContent = a.comentarioAdmin || '';
+                    tr.appendChild(comentarioTd);
+
+                    tablaRechazadas.appendChild(tr);
                 }
             });
         } catch (err) {
