@@ -16,7 +16,9 @@ public class HistorialContrato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "fecha_modificacion")
     private LocalDate fechaModificacion;
+
     private String observaciones;
 
     @ManyToOne

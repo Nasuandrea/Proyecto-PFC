@@ -19,7 +19,10 @@ public class Contrato {
 
     private String tipo;
 
+    @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
+
+    @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
     @ManyToOne

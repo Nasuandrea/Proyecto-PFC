@@ -16,10 +16,13 @@ public class Documento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nombre_archivo")
     private String nombreArchivo;
+
+    @Column(name = "url_archivo")
     private String urlArchivo;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(name = "fecha_subida", columnDefinition = "TIMESTAMP")
     private LocalDateTime fechaSubida = LocalDateTime.now();
 
     @ManyToOne
