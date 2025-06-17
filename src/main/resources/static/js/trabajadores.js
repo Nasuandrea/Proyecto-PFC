@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api.js";
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             if (editando) {
                 const id = document.getElementById("usuarioId").value;
-                await fetch(`http://localhost:8080/api/usuario/${id}`, {
+                await fetch(`${API_BASE_URL}/api/usuario/${id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 alert("Usuario actualizado");
             } else {
-                await fetch("http://localhost:8080/api/auth/register", {
+                await fetch(`${API_BASE_URL}/api/auth/register`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -95,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function cargarUsuarios() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const usuarios = await res.json();
@@ -137,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function cargarProyectos() {
         try {
-            const res = await fetch("http://localhost:8080/api/proyectos", {
+            const res = await fetch(`${API_BASE_URL}/api/proyectos`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const proyectos = await res.json();
@@ -157,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function eliminar(id) {
         if (confirm("¿Estás seguro de eliminar este usuario?")) {
             try {
-                const response = await fetch(`http://localhost:8080/api/usuario/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/api/usuario/${id}`, {
                     method: "DELETE",
                     headers: { "Authorization": `Bearer ${token}` }
                 });
@@ -193,7 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
         editando = true;
 
         try {
-            const resAsignados = await fetch(`http://localhost:8080/api/usuario/${usuario.id}/proyectos`, {
+            const resAsignados = await fetch(`${API_BASE_URL}/api/usuario/${usuario.id}/proyectos`,
+                {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const asignados = await resAsignados.json();
@@ -204,7 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 proyectosAsignadosLista.appendChild(li);
             });
 
-            const resDisponibles = await fetch(`http://localhost:8080/api/usuario/${usuario.id}/proyectos/disponibles`, {
+            const resDisponibles = await fetch(`${API_BASE_URL}/api/usuario/${usuario.id}
+            /proyectos/disponibles`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const disponibles = await resDisponibles.json();

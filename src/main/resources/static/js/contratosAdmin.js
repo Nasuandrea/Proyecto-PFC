@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         if (!response.ok) throw new Error("No autorizado");
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
         try {
             if (editando) {
-                await fetch(`http://localhost:8080/api/contrato/${editId}`, {
+                await fetch(`${API_BASE_URL}/api/contrato/${editId}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     body: JSON.stringify(contrato)
                 });
             } else {
-                await fetch("http://localhost:8080/api/contrato", {
+                await fetch(`${API_BASE_URL}/api/contrato`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -85,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarUsuarios() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const usuarios = await res.json();
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarContratos() {
         try {
-            const res = await fetch("http://localhost:8080/api/contrato", {
+            const res = await fetch(`${API_BASE_URL}/api/contrato`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const contratos = await res.json();
@@ -151,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function eliminar(id) {
         if (!confirm("¿Eliminar contrato?")) return;
         try {
-            await fetch(`http://localhost:8080/api/contrato/${id}`, {
+            await fetch(`${API_BASE_URL}/api/contrato/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // Verificamos la información del usuario
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             if (editando) {
                 const id = ausenciaIdInput.value;
-                await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}/editar`, {
+                await fetch(`${API_BASE_URL}/api/usuario/parteAusencias/${id}/editar`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
                 alert("Ausencia actualizada");
             } else {
-                await fetch("http://localhost:8080/api/usuario/parteAusencias", {
+                await fetch(`${API_BASE_URL}/api/usuario/parteAusencias`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Función para cargar todas las ausencias
     async function cargarAusencias() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario/parteAusencias", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario/parteAusencias`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const ausencias = await res.json();
@@ -220,7 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function eliminarAusencia(id) {
         if (!confirm("¿Eliminar ausencia?")) return;
         try {
-            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}`, {
+            await fetch(`${API_BASE_URL}/api/usuario/parteAusencias/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });

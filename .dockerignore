@@ -1,0 +1,27 @@
+# Ignore version control system
+.git
+
+# Maven build output
+/target
+
+# IDE settings
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.idea
+*.iws
+*.iml
+*.ipr
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+/.nb-gradle/
+/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.vscode/

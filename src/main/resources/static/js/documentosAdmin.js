@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         if (!response.ok) throw new Error("No autorizado");
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             tipoDocumento: document.getElementById("tipoDocumentoId").value ? { id: document.getElementById("tipoDocumentoId").value } : null
         };
         try {
-            await fetch("http://localhost:8080/api/documento", {
+            await fetch(`${API_BASE_URL}/api/documento`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarUsuarios() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const usuarios = await res.json();
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarDocumentos() {
         try {
-            const res = await fetch("http://localhost:8080/api/documento", {
+            const res = await fetch(`${API_BASE_URL}/api/documento`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const docs = await res.json();
@@ -122,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function eliminar(id) {
         if (!confirm("¿Eliminar documento?")) return;
         try {
-            await fetch(`http://localhost:8080/api/documento/${id}`, {
+            await fetch(`${API_BASE_URL}/api/documento/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });

@@ -1,3 +1,4 @@
+import {API_BASE_URL} from "./api";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // Verificamos la información del usuario
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function cargarPartes() {
         if (!userId) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/parte/usuario/${userId}`, {
+            const res = await fetch(`${API_BASE_URL}/api/parte/usuario/${userId}`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const partes = await res.json();
@@ -118,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function eliminarParte(id) {
         if (!confirm("¿Estás seguro de eliminar este parte?")) return;
         try {
-            await fetch(`http://localhost:8080/api/parte/${id}`, {
+            await fetch(`${API_BASE_URL}/api/parte/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -133,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Cargar proyectos disponibles
     async function cargarProyectos() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario/mis-proyectos", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario/mis-proyectos`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const proyectos = await res.json();
@@ -177,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             if (editando) {
                 const id = document.getElementById("parteId").value;
-                await fetch(`http://localhost:8080/api/parte/${id}`, {
+                await fetch(`${API_BASE_URL}/api/parte/${id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -187,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
                 alert("Parte actualizado");
             } else {
-                await fetch("http://localhost:8080/api/parte", {
+                await fetch(`${API_BASE_URL}/api/parte`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

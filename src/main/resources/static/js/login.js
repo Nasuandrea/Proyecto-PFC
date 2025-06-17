@@ -1,3 +1,4 @@
+import {API_BASE_URL} from "./api";
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("loginForm");
     const errorMessage = document.getElementById("error");
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             // 1. Llamada a /api/auth/login para obtener el token
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("token", token);
 
             // 3. Obtener los datos del usuario
-            const meResponse = await fetch("http://localhost:8080/api/usuario/me", {
+            const meResponse = await fetch(`${API_BASE_URL}/api/usuario/me`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`

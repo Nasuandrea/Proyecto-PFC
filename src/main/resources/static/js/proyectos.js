@@ -1,3 +1,4 @@
+import {API_BASE_URL} from "./api";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             if (editando) {
                 const id = document.getElementById("proyectoId").value;
-                await fetch(`http://localhost:8080/api/proyectos/${id}`, {
+                await fetch(`${API_BASE_URL}/api/proyectos/${id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -79,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
                 alert("Proyecto actualizado");
             } else {
-                await fetch("http://localhost:8080/api/proyectos", {
+                await fetch(`${API_BASE_URL}/api/proyectos`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -114,8 +115,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function cargarProyectos() {
         try {
             const url = esAdmin
-                ? "http://localhost:8080/api/proyectos"
-                : "http://localhost:8080/api/usuario/mis-proyectos";
+                ? `${API_BASE_URL}/api/proyectos`
+                : `${API_BASE_URL}/api/usuario/mis-proyectos`;
             const res = await fetch(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });

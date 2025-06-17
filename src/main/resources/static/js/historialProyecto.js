@@ -1,3 +1,4 @@
+import {API_BASE_URL} from "./api";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarProyectos() {
         try {
-            const res = await fetch("http://localhost:8080/api/proyectos", {
+            const res = await fetch(`${API_BASE_URL}/api/proyectos`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const proyectos = await res.json();
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const proyectoId = proyectoSelect.value;
         if (!proyectoId) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/proyectos/${proyectoId}/info`, {
+            const res = await fetch(`${API_BASE_URL}/api/proyectos/${proyectoId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const info = await res.json();

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -10,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarAusencias() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario/parteAusencias/admin", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario/parteAusencias/admin`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const ausencias = await res.json();
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function aprobarAusencia(id) {
         try {
-            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}/aprobar`, {
+            await fetch(`${API_BASE_URL}/api/usuario/parteAusencias/${id}/aprobar`, {
                 method: "PUT",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (comentario === null) return;
         try {
             const body = { estado: "RECHAZADA", comentarioAdmin: comentario };
-            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}`, {
+            await fetch(`${API_BASE_URL}/api/usuario/parteAusencias/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

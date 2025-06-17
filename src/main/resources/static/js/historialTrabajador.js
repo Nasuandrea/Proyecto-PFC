@@ -1,3 +1,4 @@
+import {API_BASE_URL} from "./api";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:8080/api/usuario/me", {
+        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
         if (!response.ok) {
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarUsuarios() {
         try {
-            const res = await fetch("http://localhost:8080/api/usuario", {
+            const res = await fetch(`${API_BASE_URL}/api/usuario`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const usuarios = await res.json();
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const usuarioId = usuarioSelect.value;
         if (!usuarioId) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/usuario/${usuarioId}/info`, {
+            const res = await fetch(`${API_BASE_URL}/api/usuario/${usuarioId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const info = await res.json();
