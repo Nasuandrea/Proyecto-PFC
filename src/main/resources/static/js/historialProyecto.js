@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mensaje = document.getElementById("mensaje-usuario");
     const proyectoSelect = document.getElementById("proyectoSelect");
     const listaHistorial = document.getElementById("listaHistorialProyecto");
+    const tablaTrabajadoresBody = document.getElementById("tablaTrabajadoresBody");
+    const tablaPartesBody = document.getElementById("tablaPartesBody");
+    const tablaHistorialBody = document.getElementById("tablaHistorialBody");
 
     if (!token) {
         mensaje.textContent = "No hay token. Redirigiendo al login...";
@@ -32,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "login.html";
     }
 
-    proyectoSelect.addEventListener("change", cargarHistorial);
+    proyectoSelect.addEventListener("change", cargarInfo);
 
     async function cargarProyectos() {
         try {
@@ -52,22 +55,47 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function cargarHistorial() {
+    async function cargarInfo() {
         const proyectoId = proyectoSelect.value;
         if (!proyectoId) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/historial/proyecto/${proyectoId}`, {
+            const res = await fetch(`http://localhost:8080/api/proyectos/${proyectoId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
-            const historial = await res.json();
-            listaHistorial.innerHTML = "";
-            historial.forEach(h => {
-                const li = document.createElement("li");
-                li.textContent = `${h.fechaModificacion} - ${h.observaciones || ''}`;
-                listaHistorial.appendChild(li);
+            const info = await res.json();
+
+            tablaTrabajadoresBody.innerHTML = "";
+            (info.trabajadores || []).forEach(t => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${t.nombre}</td>
+                    <td>${t.apellidos}</td>
+                    <td>${t.correo}</td>`;
+                tablaTrabajadoresBody.appendChild(tr);
+            });
+
+            tablaPartesBody.innerHTML = "";
+            (info.partes || []).forEach(p => {
+                const tr = document.createElement("tr");
+                const trabajador = p.usuario ? `${p.usuario.nombre} ${p.usuario.apellidos}` : "";
+                tr.innerHTML = `
+                    <td>${p.fecha}</td>
+                    <td>${trabajador}</td>
+                    <td>${p.horasTrabajadas}</td>
+                    <td>${p.descanso}</td>`;
+                tablaPartesBody.appendChild(tr);
+            });
+
+            tablaHistorialBody.innerHTML = "";
+            (info.historial || []).forEach(h => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${h.fechaModificacion}</td>
+                    <td>${h.observaciones || ""}</td>`;
+                tablaHistorialBody.appendChild(tr);
             });
         } catch (err) {
-            console.error("Error al cargar historial", err);
+            console.error("Error al cargar información", err);
         }
     }
 });

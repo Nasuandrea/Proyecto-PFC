@@ -1,11 +1,17 @@
 package com.hrmanager.controller;
 
+import com.hrmanager.dto.ProyectoInfoDTO;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
+import com.hrmanager.model.UsuarioProyecto;
+import com.hrmanager.repository.HistorialContratoRepository;
+import com.hrmanager.repository.ParteRepository;
 import com.hrmanager.repository.ProyectoRepository;
+import com.hrmanager.repository.UsuarioProyectoRepository;
 import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -20,6 +26,15 @@ public class ProyectoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ParteRepository parteRepository;
+
+    @Autowired
+    private UsuarioProyectoRepository usuarioProyectoRepository;
+
+    @Autowired
+    private HistorialContratoRepository historialContratoRepository;
 
     // Obtener todos los proyectos
     @GetMapping
@@ -95,5 +110,26 @@ public class ProyectoController {
             return ResponseEntity.ok(proyectoRepository.save(proyecto));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/info")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProyectoInfoDTO> getProyectoInfo(@PathVariable Long id) {
+        Optional<Proyecto> proyectoOpt = proyectoRepository.findById(id);
+        if (proyectoOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Proyecto proyecto = proyectoOpt.get();
+        ProyectoInfoDTO dto = new ProyectoInfoDTO();
+        dto.proyecto = proyecto;
+        dto.trabajadores = usuarioProyectoRepository.findByProyectoId(proyecto)
+                .stream()
+                .map(UsuarioProyecto::getUsuarioId)
+                .toList();
+        dto.partes = parteRepository.findByProyectoId(id);
+        dto.historial = historialContratoRepository.findByProyectoId(id);
+
+        return ResponseEntity.ok(dto);
     }
 }
