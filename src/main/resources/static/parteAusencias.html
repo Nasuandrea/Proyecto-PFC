@@ -27,6 +27,7 @@
 
         <!-- Formulario de creación de ausencia -->
         <form id="solicitarAusenciaForm" class="styled-form">
+            <input type="hidden" id="ausenciaId">
             <div class="form-row">
                 <label for="fechaInicio">Fecha Inicio</label>
                 <input type="date" id="fechaInicio" placeholder="Fecha de inicio" required>
@@ -44,6 +45,7 @@
             </div>
             <div class="form-row">
                 <button type="submit" id="guardarBtn">Solicitar Ausencia</button>
+                <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
             </div>
         </form>
 

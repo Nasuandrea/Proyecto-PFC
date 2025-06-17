@@ -104,4 +104,18 @@ public class ParteAusenciasController {
         ausenciaService.aprobarAusencia(id);
         return ResponseEntity.ok("Ausencia aprobada correctamente.");
     }
+
+    @PutMapping("/{id}/editar")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwnerAusencia(#id)")
+    public ResponseEntity<Ausencia> editarAusencia(@PathVariable Long id, @RequestBody Ausencia ausencia) {
+        return ResponseEntity.ok(ausenciaService.editarAusencia(id, ausencia));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurityService.isOwnerAusencia(#id)")
+    public ResponseEntity<Void> deleteAusencia(@PathVariable Long id) {
+        ausenciaService.deleteAusencia(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

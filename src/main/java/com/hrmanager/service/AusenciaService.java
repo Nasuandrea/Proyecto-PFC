@@ -85,4 +85,30 @@ public class AusenciaService {
         ausencia.setEstado(Ausencia.Estado.APROBADA); // Establecer el estado a APROBADA
         ausenciaRepository.save(ausencia);
     }
+
+    /**
+     * Editar una ausencia pendiente.
+     * @param id ID de la ausencia.
+     * @param datos Datos a actualizar.
+     * @return Ausencia actualizada.
+     */
+    public Ausencia editarAusencia(Long id, Ausencia datos) {
+        Ausencia existente = ausenciaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ausencia no encontrada"));
+
+        existente.setFechaInicio(datos.getFechaInicio());
+        existente.setFechaFin(datos.getFechaFin());
+        existente.setTipo(datos.getTipo());
+        existente.setMotivo(datos.getMotivo());
+
+        return ausenciaRepository.save(existente);
+    }
+
+    /**
+     * Eliminar una ausencia.
+     * @param id ID de la ausencia.
+     */
+    public void deleteAusencia(Long id) {
+        ausenciaRepository.deleteById(id);
+    }
 }

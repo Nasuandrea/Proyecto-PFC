@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
+    let esAdmin = false;
 
     if (!token) {
         mensaje.textContent = "No hay token. Redirigiendo al login...";
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const user = await response.json();
+        esAdmin = user.rol.nombre === "ADMIN";
         mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
 
         // Mostrar u ocultar elementos del sidebar según el rol
@@ -41,9 +43,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "login.html";
     }
     const form = document.getElementById("solicitarAusenciaForm");
+    const cancelarBtn = document.getElementById("cancelarBtn");
+    const guardarBtn = document.getElementById("guardarBtn");
+    const ausenciaIdInput = document.getElementById("ausenciaId");
     const tablaPendientes = document.querySelector("#tablaPendientes tbody");
     const tablaAprobadas = document.querySelector("#tablaAprobadas tbody");
     const tablaRechazadas = document.querySelector("#tablaRechazadas tbody");
+
+    let editando = false;
 
     cargarAusencias();  // Cargar las ausencias cuando se cargue la página
 
@@ -59,20 +66,37 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         try {
-            await fetch("http://localhost:8080/api/usuario/parteAusencias", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(ausencia)
-            });
+            if (editando) {
+                const id = ausenciaIdInput.value;
+                await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}/editar`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(ausencia)
+                });
+                alert("Ausencia actualizada");
+            } else {
+                await fetch("http://localhost:8080/api/usuario/parteAusencias", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(ausencia)
+                });
+                alert("Solicitud de ausencia enviada");
+            }
 
-            alert("Solicitud de ausencia enviada");
             form.reset();
-            cargarAusencias();  // Volver a cargar la lista después de enviar la solicitud
+            cancelarBtn.style.display = "none";
+            guardarBtn.textContent = "Solicitar Ausencia";
+            editando = false;
+            ausenciaIdInput.value = "";
+            cargarAusencias();
         } catch (err) {
-            alert("Error al solicitar ausencia: " + err.message);
+            alert("Error al guardar ausencia: " + err.message);
         }
     });
 
@@ -110,15 +134,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                     tr.appendChild(motivoTd);
 
                     const accionesTd = document.createElement("td");
-                    const aprobarBtn = document.createElement("button");
-                    aprobarBtn.textContent = "Aceptar";
-                    aprobarBtn.onclick = () => actualizarEstado(a.id, "APROBADA");
-                    accionesTd.appendChild(aprobarBtn);
+                    const editarBtn = document.createElement("span");
+                    editarBtn.innerHTML = "✏️";
+                    editarBtn.style.cursor = "pointer";
+                    editarBtn.title = "Editar";
+                    editarBtn.onclick = () => editarAusencia(a);
 
-                    const denegarBtn = document.createElement("button");
-                    denegarBtn.textContent = "Denegar";
-                    denegarBtn.onclick = () => actualizarEstado(a.id, "RECHAZADA");
-                    accionesTd.appendChild(denegarBtn);
+                    const eliminarBtn = document.createElement("span");
+                    eliminarBtn.innerHTML = "🗑️";
+                    eliminarBtn.style.cursor = "pointer";
+                    eliminarBtn.title = "Eliminar";
+                    eliminarBtn.onclick = () => eliminarAusencia(a.id);
+
+                    accionesTd.appendChild(editarBtn);
+                    accionesTd.appendChild(eliminarBtn);
 
                     tr.appendChild(accionesTd);
                     tablaPendientes.appendChild(tr);
@@ -177,23 +206,36 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Función para actualizar el estado de una ausencia
-    async function actualizarEstado(id, estado) {
+    function editarAusencia(a) {
+        ausenciaIdInput.value = a.id;
+        document.getElementById("fechaInicio").value = a.fechaInicio;
+        document.getElementById("fechaFin").value = a.fechaFin;
+        document.getElementById("tipoAusencia").value = a.tipo;
+        document.getElementById("motivo").value = a.motivo;
+        guardarBtn.textContent = "Guardar cambios";
+        cancelarBtn.style.display = "inline-block";
+        editando = true;
+    }
+
+    async function eliminarAusencia(id) {
+        if (!confirm("¿Eliminar ausencia?")) return;
         try {
-            const comentarioAdmin = prompt("Introduce un comentario para la ausencia:");
-
-            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}?estado=${estado}&comentarioAdmin=
-            ${comentarioAdmin}`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
+            await fetch(`http://localhost:8080/api/usuario/parteAusencias/${id}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
             });
-
-            alert("Estado actualizado");
-            cargarAusencias();  // Recargar la lista después de actualizar el estado
+            cargarAusencias();
         } catch (err) {
-            alert("Error al actualizar el estado: " + err.message);
+            alert("Error al eliminar ausencia: " + err.message);
         }
     }
+
+    cancelarBtn.addEventListener("click", () => {
+        form.reset();
+        cancelarBtn.style.display = "none";
+        guardarBtn.textContent = "Solicitar Ausencia";
+        editando = false;
+        ausenciaIdInput.value = "";
+    });
+
 });

@@ -2,8 +2,10 @@ package com.hrmanager.service;
 
 import com.hrmanager.model.Usuario;
 import com.hrmanager.model.Parte;
+import com.hrmanager.model.Ausencia;
 import com.hrmanager.repository.UsuarioRepository;
 import com.hrmanager.repository.ParteRepository;
+import com.hrmanager.repository.AusenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,9 @@ public class UserSecurityService {
 
     @Autowired
     private ParteRepository parteRepository;
+
+    @Autowired
+    private AusenciaRepository ausenciaRepository;
 
     // Método para obtener el usuario autenticado
     public Usuario getAuthenticatedUser() {
@@ -37,5 +42,12 @@ public class UserSecurityService {
         Usuario usuario = getAuthenticatedUser();
         Parte parte = parteRepository.findById(parteId).orElse(null);
         return parte != null && parte.getUsuario().getId().equals(usuario.getId());
+    }
+
+    // Comprobar si el usuario autenticado es propietario de una Ausencia
+    public boolean isOwnerAusencia(Long ausenciaId) {
+        Usuario usuario = getAuthenticatedUser();
+        Ausencia ausencia = ausenciaRepository.findById(ausenciaId).orElse(null);
+        return ausencia != null && ausencia.getUsuario().getId().equals(usuario.getId());
     }
 }
