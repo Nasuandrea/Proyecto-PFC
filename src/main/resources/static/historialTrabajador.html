@@ -31,28 +31,84 @@
             </select>
         </div>
         <div class="lista-trabajadores">
-            <h3>Historial</h3>
-            <ul id="listaHistorial"></ul>
-        </div>
-        <div class="lista-trabajadores">
             <h3>Partes</h3>
-            <ul id="listaPartes"></ul>
-        </div>
-        <div class="lista-trabajadores">
+            <table id="tablaPartes">
+                <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Proyecto</th>
+                    <th>Horas trabajadas</th>
+                    <th>Descanso</th>
+                </tr>
+                </thead>
+                <tbody id="tablaPartesBody"></tbody>
+            </table>
+
             <h3>Proyectos</h3>
-            <ul id="listaProyectos"></ul>
-        </div>
-        <div class="lista-trabajadores">
+            <table id="tablaProyectos">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Horas estimadas</th>
+                    <th>Horas totales</th>
+                </tr>
+                </thead>
+                <tbody id="tablaProyectosBody"></tbody>
+            </table>
+
             <h3>Ausencias</h3>
-            <ul id="listaAusencias"></ul>
-        </div>
-        <div class="lista-trabajadores">
+            <table id="tablaAusencias">
+                <thead>
+                <tr>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Motivo</th>
+                    <th>Comentario admin</th>
+                </tr>
+                </thead>
+                <tbody id="tablaAusenciasBody"></tbody>
+            </table>
+
             <h3>Contratos</h3>
-            <ul id="listaContratos"></ul>
-        </div>
-        <div class="lista-trabajadores">
+            <table id="tablaContratos">
+                <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                </tr>
+                </thead>
+                <tbody id="tablaContratosBody"></tbody>
+            </table>
+
+            <h3>Historial</h3>
+            <table id="tablaHistorial">
+                <thead>
+                <tr>
+                    <th>Fecha modificación</th>
+                    <th>Observaciones</th>
+                </tr>
+                </thead>
+                <tbody id="tablaHistorialBody"></tbody>
+            </table>
+
             <h3>Documentos</h3>
-            <ul id="listaDocumentos"></ul>
+            <table id="tablaDocumentos">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>URL</th>
+                    <th>Fecha subida</th>
+                    <th>Tipo</th>
+                </tr>
+                </thead>
+                <tbody id="tablaDocumentosBody"></tbody>
+            </table>
         </div>
     </div>
 </div>

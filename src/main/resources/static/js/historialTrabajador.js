@@ -2,12 +2,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
     const usuarioSelect = document.getElementById("usuarioSelect");
-    const listaHistorial = document.getElementById("listaHistorial");
-    const listaPartes = document.getElementById("listaPartes");
-    const listaProyectos = document.getElementById("listaProyectos");
-    const listaAusencias = document.getElementById("listaAusencias");
-    const listaContratos = document.getElementById("listaContratos");
-    const listaDocumentos = document.getElementById("listaDocumentos");
+    const tablaPartesBody = document.getElementById("tablaPartesBody");
+    const tablaProyectosBody = document.getElementById("tablaProyectosBody");
+    const tablaAusenciasBody = document.getElementById("tablaAusenciasBody");
+    const tablaContratosBody = document.getElementById("tablaContratosBody");
+    const tablaHistorialBody = document.getElementById("tablaHistorialBody");
+    const tablaDocumentosBody = document.getElementById("tablaDocumentosBody");
 
     if (!token) {
         mensaje.textContent = "No hay token. Redirigiendo al login...";
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "login.html";
     }
 
-    usuarioSelect.addEventListener("change", cargarHistorial);
+    usuarioSelect.addEventListener("change", cargarInfo);
 
     async function cargarUsuarios() {
         try {
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function cargarHistorial() {
+    async function cargarInfo() {
         const usuarioId = usuarioSelect.value;
         if (!usuarioId) return;
         try {
@@ -65,45 +65,75 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const info = await res.json();
-            listaHistorial.innerHTML = "";
-            listaPartes.innerHTML = "";
-            listaProyectos.innerHTML = "";
-            listaAusencias.innerHTML = "";
-            listaContratos.innerHTML = "";
-            listaDocumentos.innerHTML = "";
 
-            info.historial.forEach(h => {
-                const li = document.createElement("li");
-                li.textContent = `${h.fechaModificacion} - ${h.observaciones || ''}`;
-                listaHistorial.appendChild(li);
-            });
+            tablaPartesBody.innerHTML = "";
             info.partes.forEach(p => {
-                const li = document.createElement("li");
-                li.textContent = `${p.fecha} - ${p.proyecto?.nombre || ''}`;
-                listaPartes.appendChild(li);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${p.fecha}</td>
+                    <td>${p.proyecto?.nombre || ""}</td>
+                    <td>${p.horasTrabajadas}</td>
+                    <td>${p.descanso}</td>`;
+                tablaPartesBody.appendChild(tr);
             });
+
+            tablaProyectosBody.innerHTML = "";
             info.proyectos.forEach(p => {
-                const li = document.createElement("li");
-                li.textContent = p.nombre;
-                listaProyectos.appendChild(li);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${p.nombre}</td>
+                    <td>${p.descripcion}</td>
+                    <td>${p.fechaInicio}</td>
+                    <td>${p.fechaFin || ""}</td>
+                    <td>${p.horasEstimadas}</td>
+                    <td>${p.horasTotales}</td>`;
+                tablaProyectosBody.appendChild(tr);
             });
+
+            tablaAusenciasBody.innerHTML = "";
             info.ausencias.forEach(a => {
-                const li = document.createElement("li");
-                li.textContent = `${a.fechaInicio} - ${a.fechaFin} (${a.tipo})`;
-                listaAusencias.appendChild(li);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${a.fechaInicio}</td>
+                    <td>${a.fechaFin}</td>
+                    <td>${a.tipo}</td>
+                    <td>${a.estado}</td>
+                    <td>${a.motivo}</td>
+                    <td>${a.comentarioAdmin || ""}</td>`;
+                tablaAusenciasBody.appendChild(tr);
             });
+
+            tablaContratosBody.innerHTML = "";
             info.contratos.forEach(c => {
-                const li = document.createElement("li");
-                li.textContent = `${c.tipo} ${c.fechaInicio} - ${c.fechaFin || ''}`;
-                listaContratos.appendChild(li);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${c.tipo}</td>
+                    <td>${c.fechaInicio}</td>
+                    <td>${c.fechaFin || ""}</td>`;
+                tablaContratosBody.appendChild(tr);
             });
+
+            tablaHistorialBody.innerHTML = "";
+            info.historial.forEach(h => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${h.fechaModificacion}</td>
+                    <td>${h.observaciones || ""}</td>`;
+                tablaHistorialBody.appendChild(tr);
+            });
+
+            tablaDocumentosBody.innerHTML = "";
             info.documentos.forEach(d => {
-                const li = document.createElement("li");
-                li.textContent = d.nombreArchivo;
-                listaDocumentos.appendChild(li);
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${d.nombreArchivo}</td>
+                    <td><a href="${d.urlArchivo}" target="_blank">Ver</a></td>
+                    <td>${d.fechaSubida}</td>
+                    <td>${d.tipoDocumento?.nombre || ""}</td>`;
+                tablaDocumentosBody.appendChild(tr);
             });
         } catch (err) {
-            console.error("Error al cargar historial", err);
+            console.error("Error al cargar información", err);
         }
     }
 });
