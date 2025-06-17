@@ -1,4 +1,4 @@
-import {API_BASE_URL} from "./api";
+import {API_BASE_URL} from "./api.js";
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("loginForm");
     const errorMessage = document.getElementById("error");
