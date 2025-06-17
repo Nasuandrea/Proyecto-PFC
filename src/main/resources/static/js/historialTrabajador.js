@@ -3,6 +3,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mensaje = document.getElementById("mensaje-usuario");
     const usuarioSelect = document.getElementById("usuarioSelect");
     const listaHistorial = document.getElementById("listaHistorial");
+    const listaPartes = document.getElementById("listaPartes");
+    const listaProyectos = document.getElementById("listaProyectos");
+    const listaAusencias = document.getElementById("listaAusencias");
+    const listaContratos = document.getElementById("listaContratos");
+    const listaDocumentos = document.getElementById("listaDocumentos");
 
     if (!token) {
         mensaje.textContent = "No hay token. Redirigiendo al login...";
@@ -56,15 +61,46 @@ document.addEventListener("DOMContentLoaded", async () => {
         const usuarioId = usuarioSelect.value;
         if (!usuarioId) return;
         try {
-            const res = await fetch(`http://localhost:8080/api/historial/usuario/${usuarioId}`, {
+            const res = await fetch(`http://localhost:8080/api/usuario/${usuarioId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
-            const historial = await res.json();
+            const info = await res.json();
             listaHistorial.innerHTML = "";
-            historial.forEach(h => {
+            listaPartes.innerHTML = "";
+            listaProyectos.innerHTML = "";
+            listaAusencias.innerHTML = "";
+            listaContratos.innerHTML = "";
+            listaDocumentos.innerHTML = "";
+
+            info.historial.forEach(h => {
                 const li = document.createElement("li");
                 li.textContent = `${h.fechaModificacion} - ${h.observaciones || ''}`;
                 listaHistorial.appendChild(li);
+            });
+            info.partes.forEach(p => {
+                const li = document.createElement("li");
+                li.textContent = `${p.fecha} - ${p.proyecto?.nombre || ''}`;
+                listaPartes.appendChild(li);
+            });
+            info.proyectos.forEach(p => {
+                const li = document.createElement("li");
+                li.textContent = p.nombre;
+                listaProyectos.appendChild(li);
+            });
+            info.ausencias.forEach(a => {
+                const li = document.createElement("li");
+                li.textContent = `${a.fechaInicio} - ${a.fechaFin} (${a.tipo})`;
+                listaAusencias.appendChild(li);
+            });
+            info.contratos.forEach(c => {
+                const li = document.createElement("li");
+                li.textContent = `${c.tipo} ${c.fechaInicio} - ${c.fechaFin || ''}`;
+                listaContratos.appendChild(li);
+            });
+            info.documentos.forEach(d => {
+                const li = document.createElement("li");
+                li.textContent = d.nombreArchivo;
+                listaDocumentos.appendChild(li);
             });
         } catch (err) {
             console.error("Error al cargar historial", err);

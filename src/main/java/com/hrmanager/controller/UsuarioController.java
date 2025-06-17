@@ -1,14 +1,12 @@
 package com.hrmanager.controller;
 
 import com.hrmanager.dto.UsuarioDTO;
+import com.hrmanager.dto.TrabajadorInfoDTO;
 import com.hrmanager.model.Rol;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.model.UsuarioProyecto;
-import com.hrmanager.repository.RolRepository;
-import com.hrmanager.repository.ProyectoRepository;
-import com.hrmanager.repository.UsuarioProyectoRepository;
-import com.hrmanager.repository.UsuarioRepository;
+import com.hrmanager.repository.*;
 import com.hrmanager.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +28,11 @@ public class UsuarioController {
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private ProyectoRepository proyectoRepository;
     @Autowired private UsuarioProyectoRepository usuarioProyectoRepository;
+    @Autowired private ParteRepository parteRepository;
+    @Autowired private AusenciaRepository ausenciaRepository;
+    @Autowired private ContratoRepository contratoRepository;
+    @Autowired private HistorialContratoRepository historialContratoRepository;
+    @Autowired private DocumentoRepository documentoRepository;
 
     @GetMapping("/me")
     public ResponseEntity<?> getMe(@RequestHeader("Authorization") String authHeader) {
@@ -80,6 +83,26 @@ public class UsuarioController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}/info")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TrabajadorInfoDTO> getTrabajadorInfo(@PathVariable Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Usuario usuario = usuarioOpt.get();
+        TrabajadorInfoDTO dto = new TrabajadorInfoDTO();
+        dto.usuario = usuario;
+        dto.partes = parteRepository.findByUsuarioId(id);
+        dto.proyectos = usuarioProyectoRepository.findProyectosByUsuario(usuario);
+        dto.ausencias = ausenciaRepository.findByUsuario(usuario);
+        dto.contratos = contratoRepository.findByUsuarioId(id);
+        dto.historial = historialContratoRepository.findByContrato_Usuario_Id(id);
+        dto.documentos = documentoRepository.findByUsuarioId(id);
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/{id}/proyectos")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Proyecto>> getProyectosUsuario(@PathVariable Long id) {
