@@ -3,6 +3,7 @@ package com.hrmanager.controller;
 import com.hrmanager.model.Documento;
 import com.hrmanager.repository.DocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,27 @@ public class DocumentoController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<Documento> getAll() {
         return documentoRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Documento> getById(@PathVariable Long id) {
+        return documentoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Documento> update(@PathVariable Long id,
+                                            @RequestBody Documento updated) {
+        return documentoRepository.findById(id).map(doc -> {
+            doc.setNombreArchivo(updated.getNombreArchivo());
+            doc.setUrlArchivo(updated.getUrlArchivo());
+            doc.setUsuario(updated.getUsuario());
+            doc.setTipoDocumento(updated.getTipoDocumento());
+            return ResponseEntity.ok(documentoRepository.save(doc));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

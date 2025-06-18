@@ -25,8 +25,8 @@ public class Documento {
     @Column(name = "fecha_subida", columnDefinition = "TIMESTAMP")
     private LocalDateTime fechaSubida = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "usuario_id", nullable = true)
     private Usuario usuario;
 
     @ManyToOne
