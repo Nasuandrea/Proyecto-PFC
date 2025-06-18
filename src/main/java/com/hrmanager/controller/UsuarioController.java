@@ -6,6 +6,7 @@ import com.hrmanager.model.Rol;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.model.UsuarioProyecto;
+import com.hrmanager.model.Contrato;
 import com.hrmanager.repository.*;
 import com.hrmanager.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,12 @@ public class UsuarioController {
         if (!usuario.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-
+        // Detach contracts from the user so historical records remain
+        List<Contrato> contratos = contratoRepository.findByUsuarioId(id);
+        for (Contrato c : contratos) {
+            c.setUsuario(null);
+            contratoRepository.save(c);
+        }
         usuarioRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

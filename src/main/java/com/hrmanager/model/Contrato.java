@@ -25,7 +25,8 @@ public class Contrato {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    // Allow nullable so that historical contracts can remain even when the user is removed
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 }
