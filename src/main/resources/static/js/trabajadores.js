@@ -231,8 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 proyectosAsignadosLista.appendChild(li);
             });
 
-            const resDisponibles = await fetch(`${API_BASE_URL}/api/usuario/${usuario.id}
-            /proyectos/disponibles`, {
+            const resDisponibles = await fetch(`${API_BASE_URL}/api/usuario/${usuario.id}/proyectos/disponibles`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const disponibles = await resDisponibles.json();
