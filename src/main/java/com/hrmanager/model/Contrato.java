@@ -27,6 +27,6 @@ public class Contrato {
 
     // Allow nullable so that historical contracts can remain even when the user is removed
     @ManyToOne(optional = true)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = true)
     private Usuario usuario;
 }

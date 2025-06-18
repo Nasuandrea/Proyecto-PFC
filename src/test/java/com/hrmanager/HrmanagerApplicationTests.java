@@ -1,4 +1,4 @@
-package com.hrmanager.hrmanager;
+package com.hrmanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
