@@ -22,11 +22,11 @@ public class Historial {
     private String observaciones;
 
     @ManyToOne
-    @JoinColumn(name = "contrato_id", nullable = false)
+    @JoinColumn(name = "contrato_id", nullable = true)
     private Contrato contrato;
 
     @ManyToOne
-    @JoinColumn(name = "proyecto_id", nullable = false)
+    @JoinColumn(name = "proyecto_id", nullable = true)
     private Proyecto proyecto;
 
 }

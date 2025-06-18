@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const guardarBtn = document.getElementById("guardarBtn");
     const horasEstimadasInput = document.getElementById("horasEstimadas");
     const horasTotalesInput = document.getElementById("horasTotales");
+    const observacionesRow = document.getElementById("observacionesRow");
+    const observacionesInput = document.getElementById("observaciones");
 
     crearBtn.style.display = "inline-block";
     guardarBtn.style.display = "none";
@@ -59,12 +61,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const proyecto = {
+        const proyectoNuevo = {
             nombre: document.getElementById("nombre").value,
             descripcion: document.getElementById("descripcion").value,
             fechaInicio: document.getElementById("fechaInicio").value,
             fechaFin: document.getElementById("fechaFin").value,
             horasEstimadas: horasEstimadasInput.value
+        };
+
+        const proyectoActualizado = {
+            nombre: document.getElementById("nombre").value,
+            descripcion: document.getElementById("descripcion").value,
+            fechaInicio: document.getElementById("fechaInicio").value,
+            fechaFin: document.getElementById("fechaFin").value,
+            horasEstimadas: horasEstimadasInput.value,
+            observaciones: observacionesInput.value
         };
 
         try {
@@ -76,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(proyecto)
+                    body: JSON.stringify(proyectoActualizado)
                 });
                 alert("Proyecto actualizado");
             } else {
@@ -86,15 +97,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(proyecto)
+                    body: JSON.stringify(proyectoNuevo)
                 });
                 alert("Proyecto creado");
             }
 
             form.reset();
+            observacionesInput.value = "";
             cancelarBtn.style.display = "none";
             crearBtn.style.display = "inline-block";
             guardarBtn.style.display = "none";
+            observacionesRow.style.display = "none";
             horasTotalesInput.style.display = "none";
             editando = false;
             cargarProyectos();
@@ -109,6 +122,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         crearBtn.style.display = "inline-block";
         guardarBtn.style.display = "none";
         cancelarBtn.style.display = "none";
+        observacionesInput.value = "";
+        observacionesRow.style.display = "none";
         horasTotalesInput.style.display = "none";
     });
 
@@ -175,6 +190,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         crearBtn.style.display = "none";
         guardarBtn.style.display = "inline-block";
         cancelarBtn.style.display = "inline-block";
+        observacionesRow.style.display = "flex";
         editando = true;
     };
 });

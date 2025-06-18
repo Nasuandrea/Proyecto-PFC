@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const usuarioSelect = document.getElementById("usuarioSelect");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const observacionesRow = document.getElementById("observacionesRow");
+    const observacionesInput = document.getElementById("observaciones");
 
     let editando = false;
     let editId = null;
@@ -41,11 +43,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const contrato = {
+        const contratoNuevo = {
             tipo: document.getElementById("tipo").value,
             fechaInicio: document.getElementById("fechaInicio").value,
             fechaFin: document.getElementById("fechaFin").value,
             usuario: { id: usuarioSelect.value }
+        };
+        const contratoActualizado = {
+            tipo: document.getElementById("tipo").value,
+            fechaInicio: document.getElementById("fechaInicio").value,
+            fechaFin: document.getElementById("fechaFin").value,
+            observaciones: observacionesInput.value
         };
         try {
             if (editando) {
@@ -55,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(contrato)
+                    body: JSON.stringify(contratoActualizado)
                 });
             } else {
                 await fetch(`${API_BASE_URL}/api/contrato`, {
@@ -64,10 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: JSON.stringify(contrato)
+                    body: JSON.stringify(contratoNuevo)
                 });
             }
             form.reset();
+            observacionesInput.value = "";
+            observacionesRow.style.display = "none";
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Crear contrato";
             editando = false;
@@ -80,6 +90,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelarBtn.addEventListener("click", () => {
         form.reset();
         editando = false;
+        observacionesInput.value = "";
+        observacionesRow.style.display = "none";
         cancelarBtn.style.display = "none";
         guardarBtn.textContent = "Crear contrato";
     });
@@ -169,6 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("tipo").value = contrato.tipo;
         document.getElementById("fechaInicio").value = contrato.fechaInicio;
         document.getElementById("fechaFin").value = contrato.fechaFin || "";
+        observacionesRow.style.display = "flex";
         cancelarBtn.style.display = "inline-block";
         guardarBtn.textContent = "Guardar";
     };
