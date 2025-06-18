@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const user = await response.json();
-        mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
+        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
 
         // Mostrar u ocultar según el rol
         if (user.rol.nombre === "ADMIN") {

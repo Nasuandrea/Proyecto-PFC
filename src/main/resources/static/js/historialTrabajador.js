@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             throw new Error("No autorizado");
         }
         const user = await response.json();
-        mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
+        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
         if (user.rol.nombre === "ADMIN") {
             document.querySelectorAll(".admin").forEach(e => e.style.display = "block");
         } else {

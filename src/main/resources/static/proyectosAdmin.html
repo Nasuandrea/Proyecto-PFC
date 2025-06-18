@@ -7,8 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+<header class="header">
+    <h1>HR Manager</h1>
+    <span id="mensaje-usuario">Cargando datos...</span>
+</header>
+<div class="page-content">
 <div class="sidebar">
-    <h2>HR Manager</h2>
     <a href="parteHoras.html" class="comun">Parte Horas</a>
     <a href="parteAusencias.html" class="comun">Parte Ausencias</a>
     <a href="trabajadoresAdmin.html" class="admin">Trabajadores</a>
@@ -22,7 +26,6 @@
 </div>
 
 <div class="main-content">
-    <p id="mensaje-usuario">Cargando datos...</p>
     <div class="contenedor-principal">
         <h1 id="formTitle">Gestionar Proyectos</h1>
 
@@ -40,7 +43,9 @@
                 <input type="date" id="fechaFin" placeholder="Fecha de Fin" required>
             </div>
             <div class="form-row">
+                <label for="horasEstimadas">Horas Estimadas</label>
                 <input type="number" id="horasEstimadas" placeholder="Horas estimadas" min="0">
+                <label for="horasTotales">Horas Realizadas</label>
                 <input type="time" id="horasTotales" placeholder="Horas totales" readonly style="display:none;">
             </div>
             <div class="form-row">
@@ -56,6 +61,10 @@
         </div>
     </div>
 </div>
+</div>
+<footer class="footer">
+    <p>&copy; 2023 HR Manager</p>
+</footer>
 
 <script type="module" src="js/proyectos.js"></script>
 </body>

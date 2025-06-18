@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const user = await response.json();
         esAdmin = user.rol.nombre === "ADMIN";
-        mensaje.textContent = `Hola, ${user.nombre} (${user.rol.nombre})`;
+        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
 
         // Mostrar u ocultar elementos del sidebar según el rol
         if (user.rol.nombre === "ADMIN") {
