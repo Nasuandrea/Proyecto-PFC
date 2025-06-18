@@ -39,8 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const doc = {
             nombreArchivo: document.getElementById("nombreArchivo").value,
             urlArchivo: document.getElementById("urlArchivo").value,
-            usuario: { id: usuarioSelect.value },
-            tipoDocumento: document.getElementById("tipoDocumentoId").value ? { id: document.getElementById("tipoDocumentoId").value } : null
+            usuario: { id: usuarioSelect.value }
         };
         try {
             await fetch(`${API_BASE_URL}/api/documento`, {
