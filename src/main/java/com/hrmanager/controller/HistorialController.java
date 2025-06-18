@@ -1,7 +1,7 @@
 package com.hrmanager.controller;
 
-import com.hrmanager.model.HistorialContrato;
-import com.hrmanager.repository.HistorialContratoRepository;
+import com.hrmanager.model.Historial;
+import com.hrmanager.repository.HistorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,24 +13,24 @@ import java.util.List;
 public class HistorialController {
 
     @Autowired
-    private HistorialContratoRepository historialContratoRepository;
+    private HistorialRepository historialRepository;
 
     @GetMapping
-    public List<HistorialContrato> getAll() {
-        return historialContratoRepository.findAll();
+    public List<Historial> getAll() {
+        return historialRepository.findAll();
     }
 
     @GetMapping("/usuario/{usuarioId}")
-    public List<HistorialContrato> getByUsuario(@PathVariable Long usuarioId) {
-        return historialContratoRepository.findByContrato_Usuario_Id(usuarioId);
+    public List<Historial> getByUsuario(@PathVariable Long usuarioId) {
+        return historialRepository.findByContrato_Usuario_Id(usuarioId);
     }
     @GetMapping("/proyecto/{proyectoId}")
-    public List<HistorialContrato> getByProyecto(@PathVariable Long proyectoId) {
-        return historialContratoRepository.findByProyectoId(proyectoId);
+    public List<Historial> getByProyecto(@PathVariable Long proyectoId) {
+        return historialRepository.findByProyectoId(proyectoId);
     }
 
     @PostMapping
-    public HistorialContrato create(@RequestBody HistorialContrato historialContrato) {
-        return historialContratoRepository.save(historialContrato);
+    public Historial create(@RequestBody Historial historialContrato) {
+        return historialRepository.save(historialContrato);
     }
 }

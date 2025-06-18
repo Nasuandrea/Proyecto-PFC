@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tablaTrabajadoresBody = document.getElementById("tablaTrabajadoresBody");
     const tablaPartesBody = document.getElementById("tablaPartesBody");
     const tablaHistorialBody = document.getElementById("tablaHistorialBody");
+    const infoProyectoDiv = document.getElementById("infoProyecto");
 
     if (!token) {
         mensaje.textContent = "No hay token. Redirigiendo al login...";
@@ -58,12 +59,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarInfo() {
         const proyectoId = proyectoSelect.value;
+        if (!proyectoId) {
+            infoProyectoDiv.innerHTML = "";
+            tablaTrabajadoresBody.innerHTML = "";
+            tablaPartesBody.innerHTML = "";
+            tablaHistorialBody.innerHTML = "";
+            return;
+        }
         if (!proyectoId) return;
         try {
             const res = await fetch(`${API_BASE_URL}/api/proyectos/${proyectoId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const info = await res.json();
+
+            const proyectoInfo = info.proyecto || {};
+            infoProyectoDiv.innerHTML = `
+                <p><strong>Nombre:</strong> ${proyectoInfo.nombre || ""}</p>
+                <p><strong>Descripción:</strong> ${proyectoInfo.descripcion || ""}</p>
+                <p><strong>Inicio:</strong> ${proyectoInfo.fechaInicio || ""}</p>
+                <p><strong>Fin:</strong> ${proyectoInfo.fechaFin || ""}</p>
+                <p><strong>Horas estimadas:</strong> ${proyectoInfo.horasEstimadas || ""}</p>
+                <p><strong>Horas totales:</strong> ${proyectoInfo.horasTotales || ""}</p>
+            `;
 
             tablaTrabajadoresBody.innerHTML = "";
             (info.trabajadores || []).forEach(t => {

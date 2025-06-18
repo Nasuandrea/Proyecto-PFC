@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const mensaje = document.getElementById("mensaje-usuario");
     const usuarioSelect = document.getElementById("usuarioSelect");
+    const infoTrabajador = document.getElementById("infoTrabajador");
     const tablaPartesBody = document.getElementById("tablaPartesBody");
     const tablaProyectosBody = document.getElementById("tablaProyectosBody");
     const tablaAusenciasBody = document.getElementById("tablaAusenciasBody");
@@ -60,13 +61,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function cargarInfo() {
         const usuarioId = usuarioSelect.value;
-        if (!usuarioId) return;
+        if (!usuarioId) {
+            infoTrabajador.innerHTML = "";
+            infoTrabajador.style.display = "none";
+            return;
+        }
+        infoTrabajador.style.display = "block";
         try {
             const res = await fetch(`${API_BASE_URL}/api/usuario/${usuarioId}/info`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const info = await res.json();
-
+            const u = info.usuario || {};
+            infoTrabajador.innerHTML = `
+                <p><strong>Nombre:</strong> ${u.nombre || ""}</p>
+                <p><strong>Apellidos:</strong> ${u.apellidos || ""}</p>
+                <p><strong>Correo:</strong> ${u.correo || ""}</p>
+                <p><strong>Teléfono:</strong> ${u.telefono || ""}</p>
+                <p><strong>Dirección:</strong> ${u.direccion || ""}</p>
+                <p><strong>DNI:</strong> ${u.dni || ""}</p>
+                <p><strong>Fecha Nacimiento:</strong> ${u.fechaNacimiento || ""}</p>`;
             tablaPartesBody.innerHTML = "";
             info.partes.forEach(p => {
                 const tr = document.createElement("tr");

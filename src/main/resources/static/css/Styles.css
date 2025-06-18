@@ -129,6 +129,14 @@ th {
     background-color: #3498db;
 }
 
+/* ======= INFO SECTION ======= */
+.info-section {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+}
+
 /* ======= LISTAS ======= */
 .lista-trabajadores,
 .lista-proyectos,

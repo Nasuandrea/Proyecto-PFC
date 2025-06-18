@@ -9,6 +9,6 @@ public class TrabajadorInfoDTO {
     public List<Proyecto> proyectos;
     public List<Ausencia> ausencias;
     public List<Contrato> contratos;
-    public List<HistorialContrato> historial;
+    public List<Historial> historial;
     public List<Documento> documentos;
 }

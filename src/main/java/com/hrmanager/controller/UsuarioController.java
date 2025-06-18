@@ -32,7 +32,7 @@ public class UsuarioController {
     @Autowired private ParteRepository parteRepository;
     @Autowired private AusenciaRepository ausenciaRepository;
     @Autowired private ContratoRepository contratoRepository;
-    @Autowired private HistorialContratoRepository historialContratoRepository;
+    @Autowired private HistorialRepository historialRepository;
     @Autowired private DocumentoRepository documentoRepository;
 
     @GetMapping("/me")
@@ -104,7 +104,7 @@ public class UsuarioController {
         dto.proyectos = usuarioProyectoRepository.findProyectosByUsuario(usuario);
         dto.ausencias = ausenciaRepository.findByUsuario(usuario);
         dto.contratos = contratoRepository.findByUsuarioId(id);
-        dto.historial = historialContratoRepository.findByContrato_Usuario_Id(id);
+        dto.historial = historialRepository.findByContrato_Usuario_Id(id);
         dto.documentos = documentoRepository.findByUsuarioId(id);
         return ResponseEntity.ok(dto);
     }

@@ -5,12 +5,12 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "HistorialContrato")
+@Table(name = "Historial")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistorialContrato {
+public class Historial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,10 @@ public class HistorialContrato {
     @ManyToOne
     @JoinColumn(name = "contrato_id", nullable = false)
     private Contrato contrato;
+
+    @ManyToOne
+    @JoinColumn(name = "proyecto_id", nullable = false)
+    private Proyecto proyecto;
 
 }
 

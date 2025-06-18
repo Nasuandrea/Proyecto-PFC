@@ -4,7 +4,7 @@ import com.hrmanager.dto.ProyectoInfoDTO;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.model.UsuarioProyecto;
-import com.hrmanager.repository.HistorialContratoRepository;
+import com.hrmanager.repository.HistorialRepository;
 import com.hrmanager.repository.ParteRepository;
 import com.hrmanager.repository.ProyectoRepository;
 import com.hrmanager.repository.UsuarioProyectoRepository;
@@ -34,7 +34,7 @@ public class ProyectoController {
     private UsuarioProyectoRepository usuarioProyectoRepository;
 
     @Autowired
-    private HistorialContratoRepository historialContratoRepository;
+    private HistorialRepository historialRepository;
 
     // Obtener todos los proyectos
     @GetMapping
@@ -128,7 +128,7 @@ public class ProyectoController {
                 .map(UsuarioProyecto::getUsuarioId)
                 .toList();
         dto.partes = parteRepository.findByProyectoId(id);
-        dto.historial = historialContratoRepository.findByProyectoId(id);
+        dto.historial = historialRepository.findByProyectoId(id);
 
         return ResponseEntity.ok(dto);
     }
