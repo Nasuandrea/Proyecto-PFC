@@ -1,6 +1,8 @@
 package com.hrmanager.controller;
 
 import com.hrmanager.dto.ProyectoInfoDTO;
+import com.hrmanager.dto.ActualizarProyectoDTO;
+import com.hrmanager.model.Historial;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.model.UsuarioProyecto;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -57,14 +60,31 @@ public class ProyectoController {
 
     // Actualizar un proyecto existente
     @PutMapping("/{id}")
-    public ResponseEntity<Proyecto> updateProyecto(@PathVariable Long id, @RequestBody Proyecto proyectoActualizado) {
+    public ResponseEntity<Proyecto> updateProyecto(@PathVariable Long id, @RequestBody ActualizarProyectoDTO dto) {
         return proyectoRepository.findById(id).map(proyecto -> {
-            proyecto.setNombre(proyectoActualizado.getNombre());
-            proyecto.setDescripcion(proyectoActualizado.getDescripcion());
-            proyecto.setFechaInicio(proyectoActualizado.getFechaInicio());
-            proyecto.setFechaFin(proyectoActualizado.getFechaFin());
-            proyecto.setHorasEstimadas(proyectoActualizado.getHorasEstimadas());
-            return ResponseEntity.ok(proyectoRepository.save(proyecto));
+            proyecto.setNombre(dto.nombre);
+            proyecto.setDescripcion(dto.descripcion);
+            if (dto.fechaInicio != null) {
+                proyecto.setFechaInicio(LocalDate.parse(dto.fechaInicio));
+            } else {
+                proyecto.setFechaInicio(null);
+            }
+            if (dto.fechaFin != null) {
+                proyecto.setFechaFin(LocalDate.parse(dto.fechaFin));
+            } else {
+                proyecto.setFechaFin(null);
+            }
+            proyecto.setHorasEstimadas(dto.horasEstimadas);
+
+            Proyecto saved = proyectoRepository.save(proyecto);
+
+            Historial h = new Historial();
+            h.setFechaModificacion(LocalDate.now());
+            h.setObservaciones(dto.observaciones);
+            h.setProyecto(saved);
+            historialRepository.save(h);
+
+            return ResponseEntity.ok(saved);
         }).orElse(ResponseEntity.notFound().build());
     }
 
