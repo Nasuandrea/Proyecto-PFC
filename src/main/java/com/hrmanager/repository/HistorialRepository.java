@@ -9,6 +9,9 @@ import java.util.List;
 public interface HistorialRepository extends JpaRepository<Historial, Long> {
     List<Historial> findByContratoId(Long contratoId);
     List<Historial> findByContrato_Usuario_Id(Long usuarioId);
-    @Query("SELECT hc FROM Historial hc WHERE hc.contrato.usuario.id IN (SELECT up.usuarioId.id FROM UsuarioProyecto up WHERE up.proyectoId.id = :proyectoId)")
-    List<Historial> findByProyectoId(@Param("proyectoId") Long proyectoId);
+    List<Historial> findByProyectoId(Long proyectoId);
+
+    @Query("SELECT h FROM Historial h WHERE h.proyecto.id IN " +
+            "(SELECT up.proyectoId.id FROM UsuarioProyecto up WHERE up.usuarioId.id = :usuarioId)")
+    List<Historial> findProyectoHistorialByUsuarioId(@Param("usuarioId") Long usuarioId);
 }

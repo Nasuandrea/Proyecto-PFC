@@ -29,8 +29,5 @@ public class Documento {
     @JoinColumn(name = "usuario_id", nullable = true)
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_documento_id")
-    private TipoDocumento tipoDocumento;
 }
 

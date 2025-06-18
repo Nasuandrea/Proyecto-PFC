@@ -39,7 +39,6 @@ public class DocumentoController {
             doc.setNombreArchivo(updated.getNombreArchivo());
             doc.setUrlArchivo(updated.getUrlArchivo());
             doc.setUsuario(updated.getUsuario());
-            doc.setTipoDocumento(updated.getTipoDocumento());
             return ResponseEntity.ok(documentoRepository.save(doc));
         }).orElse(ResponseEntity.notFound().build());
     }

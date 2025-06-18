@@ -130,8 +130,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             tablaHistorialBody.innerHTML = "";
             info.historial.forEach(h => {
+                const tipo = h.contrato ? 'Contrato' : 'Proyecto';
+                const nombre = h.contrato ? (h.contrato.tipo || '') : (h.proyecto?.nombre || '');
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
+                    <td>${tipo}</td>
+                    <td>${nombre}</td>
                     <td>${h.fechaModificacion}</td>
                     <td>${h.observaciones || ""}</td>`;
                 tablaHistorialBody.appendChild(tr);

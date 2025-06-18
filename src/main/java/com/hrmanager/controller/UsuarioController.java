@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -104,7 +105,9 @@ public class UsuarioController {
         dto.proyectos = usuarioProyectoRepository.findProyectosByUsuario(usuario);
         dto.ausencias = ausenciaRepository.findByUsuario(usuario);
         dto.contratos = contratoRepository.findByUsuarioId(id);
-        dto.historial = historialRepository.findByContrato_Usuario_Id(id);
+        var cHist = historialRepository.findByContrato_Usuario_Id(id);
+        var pHist = historialRepository.findProyectoHistorialByUsuarioId(id);
+        dto.historial = Stream.concat(cHist.stream(), pHist.stream()).toList();
         dto.documentos = documentoRepository.findByUsuarioId(id);
         return ResponseEntity.ok(dto);
     }

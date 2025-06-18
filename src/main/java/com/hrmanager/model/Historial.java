@@ -19,6 +19,7 @@ public class Historial {
     @Column(name = "fecha_modificacion")
     private LocalDate fechaModificacion;
 
+    @Column(name = "observaciones")
     private String observaciones;
 
     @ManyToOne
