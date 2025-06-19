@@ -48,8 +48,8 @@ public class ParteController {
             throw new IllegalArgumentException("El proyecto no puede ser nulo");
         }
 
-        // Convertir el proyectoId a Long si es un String
-        Long proyectoId = Long.parseLong(parte.getProyecto().getId().toString());
+        // Obtener el identificador del proyecto como Long
+        Long proyectoId = parte.getProyecto().getId();
 
         // Buscar el proyecto en la base de datos usando el ID
         Optional<Proyecto> proyectoOpt = proyectoRepository.findById(proyectoId);

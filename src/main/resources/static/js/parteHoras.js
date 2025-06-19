@@ -12,11 +12,69 @@ document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById("parteForm");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const nuevoBtn = document.getElementById("nuevoBtn");
+    const entradaBtn = document.getElementById("entradaBtn");
+    const salidaBtn = document.getElementById("salidaBtn");
+    const inicioDescansoBtn = document.getElementById("inicioDescansoBtn");
+    const finDescansoBtn = document.getElementById("finDescansoBtn");
     const proyectoSelect = document.getElementById("proyectoSelect");
     const tablaBody = document.querySelector("#tablaPartes tbody");
 
     let editando = false;
     let parteId = null;
+    let horaEntrada = null;
+    let inicioDescanso = null;
+    let finDescanso = null;
+
+    form.style.display = "none";
+
+    function pad(n) {
+        return n.toString().padStart(2, '0');
+    }
+
+    function formatDuration(ms) {
+        const totalMinutes = Math.floor(ms / 60000);
+        const h = Math.floor(totalMinutes / 60);
+        const m = totalMinutes % 60;
+        return `${pad(h)}:${pad(m)}`;
+    }
+
+    nuevoBtn.addEventListener("click", () => {
+        form.reset();
+        horaEntrada = null;
+        inicioDescanso = null;
+        finDescanso = null;
+        form.style.display = "block";
+        cancelarBtn.style.display = "inline-block";
+        guardarBtn.textContent = "Crear parte";
+        editando = false;
+    });
+
+    entradaBtn.addEventListener("click", () => {
+        horaEntrada = new Date();
+        document.getElementById("fecha").value = horaEntrada.toISOString().split('T')[0];
+    });
+
+    inicioDescansoBtn.addEventListener("click", () => {
+        inicioDescanso = new Date();
+    });
+
+    finDescansoBtn.addEventListener("click", () => {
+        if (!inicioDescanso) return;
+        finDescanso = new Date();
+        const diff = finDescanso - inicioDescanso;
+        document.getElementById("descanso").value = formatDuration(diff);
+    });
+
+    salidaBtn.addEventListener("click", () => {
+        if (!horaEntrada) return;
+        const salida = new Date();
+        let diff = salida - horaEntrada;
+        if (inicioDescanso && finDescanso) {
+            diff -= (finDescanso - inicioDescanso);
+        }
+        document.getElementById("horasTrabajadas").value = formatDuration(diff);
+    });
 
     cargarProyectos();
 
@@ -100,6 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         proyectoSelect.value = parte.proyecto?.id || "";
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";
+        form.style.display = "block";
         editando = true;
     }
 
@@ -191,6 +250,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             form.reset();
+            form.style.display = "none";
+            horaEntrada = null;
+            inicioDescanso = null;
+            finDescanso = null;
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Crear parte";
             editando = false;
@@ -204,6 +267,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cancelarBtn.addEventListener("click", () => {
         form.reset();
+        form.style.display = "none";
+        horaEntrada = null;
+        inicioDescanso = null;
+        finDescanso = null;
         editando = false;
         parteId = null;
         cancelarBtn.style.display = "none";

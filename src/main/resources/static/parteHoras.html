@@ -13,10 +13,12 @@
 
 <div class="main-content">
     <div class="contenedor-principal">
-        <h1 id="formTitle">Parte de Horas</h1>
+        <h1 id="formTitle">Parte Horas</h1>
 
-        <!-- Formulario para crear o editar parte de horas -->
-        <form id="parteForm" class="styled-form">
+        <button type="button" id="nuevoBtn">Nuevo Parte</button>
+
+        <!-- Formulario para editar parte de horas -->
+        <form id="parteForm" class="styled-form" style="display:none;">
             <input type="hidden" id="parteId">
 
             <div class="form-row">
@@ -55,6 +57,12 @@
                     <option value="">Seleccionar Proyecto</option>
                     <!-- Proyectos serán cargados aquí -->
                 </select>
+            </div>
+            <div class="form-row">
+                <button type="button" id="entradaBtn">Fichar Entrada</button>
+                <button type="button" id="salidaBtn">Fichar Salida</button>
+                <button type="button" id="inicioDescansoBtn">Inicio Descanso</button>
+                <button type="button" id="finDescansoBtn">Fin Descanso</button>
             </div>
 
             <div class="form-row">
