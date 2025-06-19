@@ -28,11 +28,14 @@
                 <input type="email" id="correo" placeholder="Correo electrónico" required>
             </div>
             <div class="form-row">
-                <input type="password" id="password" placeholder="Contraseña" required>
+                <input type="password" id="password" placeholder="Contraseña">
                 <input type="text" id="telefono" placeholder="Teléfono">
             </div>
             <div class="form-row">
                 <input type="text" id="direccion" placeholder="Dirección">
+            </div>
+            <div class="form-row">
+                <label for="fechaNacimiento">Fecha de Nacimiento</label>
                 <input type="date" id="fechaNacimiento">
             </div>
             <div class="form-row">
@@ -70,7 +73,17 @@
         <!-- Lista de trabajadores -->
         <div class="lista-trabajadores">
             <h3>Lista de Trabajadores</h3>
-            <ul id="listaUsuarios"></ul>
+            <table id="tablaUsuarios">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="listaUsuarios"></tbody>
+            </table>
         </div>
     </div>
 </div>

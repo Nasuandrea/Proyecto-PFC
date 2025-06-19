@@ -101,14 +101,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             const usuarios = await res.json();
             lista.innerHTML = "";
             usuarios.forEach(u => {
-                const li = document.createElement("li");
+                const tr = document.createElement("tr");
 
-                const info = document.createElement("span");
-                info.classList.add("info");
-                info.textContent = `${u.nombre} ${u.apellidos} - ${u.rol?.nombre || 'Sin rol'}`;
+                const nombreTd = document.createElement("td");
+                nombreTd.textContent = u.nombre;
+                tr.appendChild(nombreTd);
 
-                const acciones = document.createElement("span");
-                acciones.classList.add("acciones");
+                const apellidosTd = document.createElement("td");
+                apellidosTd.textContent = u.apellidos;
+                tr.appendChild(apellidosTd);
+
+                const rolTd = document.createElement("td");
+                rolTd.textContent = u.rol?.nombre || 'Sin rol';
+                tr.appendChild(rolTd);
+
+                const accionesTd = document.createElement("td");
+                accionesTd.classList.add("acciones");
 
                 const editarBtn = document.createElement("span");
                 editarBtn.innerHTML = "✏️";
@@ -122,13 +130,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 eliminarBtn.style.cursor = "pointer";
                 eliminarBtn.onclick = () => eliminar(u.id);
 
-                acciones.appendChild(editarBtn);
-                acciones.appendChild(eliminarBtn);
+                accionesTd.appendChild(editarBtn);
+                accionesTd.appendChild(eliminarBtn);
+                tr.appendChild(accionesTd);
 
-                li.appendChild(info);
-                li.appendChild(acciones);
-
-                lista.appendChild(li);
+                lista.appendChild(tr);
             });
         } catch (err) {
             console.error("Error al cargar usuarios", err);
