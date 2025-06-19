@@ -22,6 +22,12 @@ table {
     margin-top: 10px;
 }
 
+caption {
+    font-weight: bold;
+    text-align: left;
+    padding-bottom: 5px;
+}
+
 th, td {
     border: 1px solid #ccc;
     padding: 8px;
