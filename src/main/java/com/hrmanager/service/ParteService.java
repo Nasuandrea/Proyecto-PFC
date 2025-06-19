@@ -32,8 +32,8 @@ public class ParteService {
         parte.setProyecto(proyectoRepository.findById(parte.getProyecto().getId()).orElseThrow(()
                 -> new RuntimeException("Proyecto no encontrado")));
 
-        validateTimes(parte);
-        parte.setHorasTrabajadas(calculateHorasTrabajadas(parte));
+        parte.setHorasTrabajadas(
+                calcularHoras(parte.getHoraEntrada(), parte.getHoraSalida(), parte.getDescanso()));
 
         Parte saved = parteRepository.save(parte);
         updateHorasTotales(saved.getProyecto().getId());
@@ -60,10 +60,9 @@ public class ParteService {
         existente.setFecha(datos.getFecha());
         existente.setHoraEntrada(datos.getHoraEntrada());
         existente.setHoraSalida(datos.getHoraSalida());
-        existente.setHoraInicioDescanso(datos.getHoraInicioDescanso());
-        existente.setHoraFinDescanso(datos.getHoraFinDescanso());
         existente.setDescanso(datos.getDescanso());
-        existente.setHorasTrabajadas(datos.getHorasTrabajadas());
+        existente.setHorasTrabajadas(
+                calcularHoras(existente.getHoraEntrada(), existente.getHoraSalida(), existente.getDescanso()));
 
         if (datos.getProyecto() != null && datos.getProyecto().getId() != null) {
             existente.setProyecto(
@@ -85,40 +84,45 @@ public class ParteService {
 
     private void updateHorasTotales(Long proyectoId) {
         List<Parte> partes = parteRepository.findByProyectoId(proyectoId);
-        Duration total = Duration.ZERO;
+        LocalTime totalHoras = LocalTime.of(0, 0, 0);
         for (Parte parte : partes) {
-            total = total.plus(Duration.between(LocalTime.MIDNIGHT, parte.getHorasTrabajadas()));
-
-
-            // Actualizar el proyecto con el total de horas trabajadas
-            LocalTime finalTotalHoras = LocalTime.MIDNIGHT.plus(total);
-            proyectoRepository.findById(proyectoId).ifPresent(proyecto -> {
-                proyecto.setHorasTotales(finalTotalHoras);
-                proyectoRepository.save(proyecto);
-            });
-        }
-    }
-    private void validateTimes(Parte parte) {
-        if (parte.getHoraEntrada() == null || parte.getHoraSalida() == null
-                || parte.getHoraInicioDescanso() == null || parte.getHoraFinDescanso() == null) {
-            throw new IllegalArgumentException("Horas de entrada, salida e intervalos de descanso son obligatorios");
+            totalHoras = totalHoras.plusHours(parte.getHorasTrabajadas().getHour())
+                    .plusMinutes(parte.getHorasTrabajadas().getMinute())
+                    .plusSeconds(parte.getHorasTrabajadas().getSecond());
         }
 
-        if (!parte.getHoraSalida().isAfter(parte.getHoraEntrada())) {
-            throw new IllegalArgumentException("La hora de salida debe ser posterior a la de entrada");
-        }
-
-        if (parte.getHoraInicioDescanso().isBefore(parte.getHoraEntrada())
-                || parte.getHoraFinDescanso().isAfter(parte.getHoraSalida())
-                || !parte.getHoraFinDescanso().isAfter(parte.getHoraInicioDescanso())) {
-            throw new IllegalArgumentException("El descanso debe estar dentro de la jornada laboral");
-        }
+        // Actualizar el proyecto con el total de horas trabajadas
+        LocalTime finalTotalHoras = totalHoras;
+        proyectoRepository.findById(proyectoId).ifPresent(proyecto -> {
+            proyecto.setHorasTotales(finalTotalHoras);
+            proyectoRepository.save(proyecto);
+        });
     }
 
-    private LocalTime calculateHorasTrabajadas(Parte parte) {
-        Duration jornada = Duration.between(parte.getHoraEntrada(), parte.getHoraSalida());
-        Duration descanso = Duration.between(parte.getHoraInicioDescanso(), parte.getHoraFinDescanso());
-        Duration neto = jornada.minus(descanso);
-        return LocalTime.MIDNIGHT.plus(neto);
+    private LocalTime calcularHoras(LocalTime entrada, LocalTime salida, LocalTime descanso) {
+        if (entrada == null || salida == null) {
+            return LocalTime.MIDNIGHT;
+        }
+
+        if (descanso == null) {
+            descanso = LocalTime.MIDNIGHT;
+        }
+
+        Duration duracion = Duration.between(entrada, salida);
+        if (duracion.isNegative()) {
+            duracion = duracion.plusHours(24);
+        }
+        Duration descansoDur = Duration.ofHours(descanso.getHour())
+                .plusMinutes(descanso.getMinute())
+                .plusSeconds(descanso.getSecond());
+        duracion = duracion.minus(descansoDur);
+        if (duracion.isNegative()) {
+            duracion = Duration.ZERO;
+        }
+        return LocalTime.MIDNIGHT
+                .plusHours(duracion.toHoursPart())
+                .plusMinutes(duracion.toMinutesPart())
+                .plusSeconds(duracion.toSecondsPart());
     }
+
 }

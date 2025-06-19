@@ -144,6 +144,31 @@ th {
     background-color: #3498db;
 }
 
+/* ======= BOTONES FICHAR ======= */
+.botones-fichar,
+.botones-descanso {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.botones-fichar button,
+.botones-descanso button {
+    padding: 10px 20px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botones-fichar button:hover,
+.botones-descanso button:hover {
+    background-color: #3498db;
+}
+
 /* ======= INFO SECTION ======= */
 .info-section {
     margin-top: 15px;
