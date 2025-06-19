@@ -3,6 +3,7 @@ package com.hrmanager.controller;
 import com.hrmanager.dto.UsuarioDTO;
 import com.hrmanager.dto.TrabajadorInfoDTO;
 import com.hrmanager.dto.ActualizarPerfilDTO;
+import com.hrmanager.dto.CambiarPasswordDTO;
 import com.hrmanager.model.Rol;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
@@ -80,6 +81,21 @@ public class UsuarioController {
         }
         usuarioRepository.save(usuario);
         return ResponseEntity.ok("Perfil actualizado correctamente");
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<?> cambiarPassword(@RequestBody CambiarPasswordDTO dto,
+                                             @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Usuario usuario = usuarioOpt.get();
+        usuario.setPassword(passwordEncoder.encode(dto.nuevaPassword));
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok("Contrase\u00f1a actualizada correctamente");
     }
 
     @GetMapping
