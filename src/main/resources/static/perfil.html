@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Manager - Mi Perfil</title>
+    <link rel="stylesheet" href="css/Styles.css">
+</head>
+<body>
+<header class="header">
+    <h1>HR Manager</h1>
+    <span id="mensaje-usuario">Cargando datos...</span>
+    <div class="profile-container">
+        <span id="profile-icon"></span>
+        <div id="profile-dropdown" class="profile-dropdown">
+            <p id="dropdown-email"></p>
+            <a href="perfil.html">Mi perfil</a>
+            <a href="cambiarPassword.html">Cambiar contraseña</a>
+            <a href="#" id="logout-link">Cerrar sesión</a>
+        </div>
+    </div>
+</header>
+<div class="page-content">
+    <div class="sidebar">
+        <a href="parteHoras.html" class="comun">Parte Horas</a>
+        <a href="parteAusencias.html" class="comun">Parte Ausencias</a>
+        <a href="trabajadoresAdmin.html" class="admin">Trabajadores</a>
+        <a href="proyectosAdmin.html" class="admin">Proyectos</a>
+        <a href="ausenciasAdmin.html" class="admin">Ausencias</a>
+        <a href="contratosAdmin.html" class="admin">Contratos</a>
+        <a href="documentosAdmin.html" class="admin">Documentos</a>
+        <a href="historialTrabajador.html" class="admin">Historial Trabajador</a>
+        <a href="historialProyecto.html" class="admin">Historial Proyecto</a>
+        <a href="login.html">Cerrar Sesión</a>
+    </div>
+    <div class="main-content">
+        <div class="contenedor-principal">
+            <h1>Mi Perfil</h1>
+            <form id="perfilForm" class="styled-form">
+                <div class="form-row">
+                    <input type="text" id="nombre" placeholder="Nombre" required>
+                    <input type="text" id="apellidos" placeholder="Apellidos" required>
+                </div>
+                <div class="form-row">
+                    <input type="email" id="correo" placeholder="Correo" required disabled>
+                    <input type="text" id="telefono" placeholder="Teléfono">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="direccion" placeholder="Dirección">
+                    <input type="date" id="fechaNacimiento">
+                </div>
+                <div class="form-row">
+                    <button type="submit">Guardar cambios</button>
+                </div>
+            </form>
+            <div class="styled-form">
+                <h3>Avatar</h3>
+                <img id="avatar-preview" class="avatar-preview" src="" alt="avatar">
+                <input type="file" id="avatar" accept="image/*">
+                <button id="uploadAvatarBtn">Subir avatar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <p>&copy; 2025 HR Manager</p>
+</footer>
+<script type="module" src="js/perfil.js"></script>
+<script type="module" src="js/header.js"></script>
+</body>
+</html>
