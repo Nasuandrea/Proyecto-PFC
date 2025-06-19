@@ -29,7 +29,7 @@ public class Proyecto {
     @Column(name = "horas_estimadas")
     private Integer horasEstimadas;
 
-    @Column(name = "horas_totales")
+    @Column(name = "horas_totales", columnDefinition = "BIGINT")
     private Duration horasTotales;
 
     @ManyToMany
