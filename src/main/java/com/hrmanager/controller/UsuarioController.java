@@ -2,6 +2,7 @@ package com.hrmanager.controller;
 
 import com.hrmanager.dto.UsuarioDTO;
 import com.hrmanager.dto.TrabajadorInfoDTO;
+import com.hrmanager.dto.ActualizarPerfilDTO;
 import com.hrmanager.model.Rol;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
@@ -58,6 +59,27 @@ public class UsuarioController {
                 .toList();
 
         return ResponseEntity.ok(proyectos);
+    }
+
+    @PutMapping("/perfil")
+    public ResponseEntity<?> actualizarPerfil(@RequestBody ActualizarPerfilDTO dto,
+                                              @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String correo = jwtService.extractUsername(token);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Usuario usuario = usuarioOpt.get();
+        usuario.setNombre(dto.nombre);
+        usuario.setApellidos(dto.apellidos);
+        usuario.setTelefono(dto.telefono);
+        usuario.setDireccion(dto.direccion);
+        if (dto.fechaNacimiento != null) {
+            usuario.setFechaNacimiento(LocalDate.parse(dto.fechaNacimiento));
+        }
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok("Perfil actualizado correctamente");
     }
 
     @GetMapping
