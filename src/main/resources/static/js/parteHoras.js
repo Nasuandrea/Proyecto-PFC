@@ -48,13 +48,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tr.appendChild(descansoTd);
 
                 const accionesTd = document.createElement("td");
-                const editarBtn = document.createElement("button");
-                editarBtn.textContent = "Editar";
+                const editarBtn = document.createElement("span");
+                editarBtn.innerHTML = "✏️";
+                editarBtn.title = "Editar";
+                editarBtn.style.cursor = "pointer";
                 editarBtn.onclick = () => editarParte(p);
                 accionesTd.appendChild(editarBtn);
 
-                const eliminarBtn = document.createElement("button");
-                eliminarBtn.textContent = "Eliminar";
+                const eliminarBtn = document.createElement("span");
+                eliminarBtn.innerHTML = "🗑️";
+                eliminarBtn.title = "Eliminar";
+                eliminarBtn.style.cursor = "pointer";
                 eliminarBtn.onclick = () => eliminarParte(p.id);
                 accionesTd.appendChild(eliminarBtn);
 
