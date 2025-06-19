@@ -306,8 +306,9 @@ th {
         cursor: pointer;
     }
 
-    #profile-icon {
-        font-size: 24px;
+    .profile-icon {
+        width: 24px;
+        height: 24px;
     }
 
     .profile-dropdown {
@@ -343,11 +344,4 @@ th {
         font-weight: bold;
     }
 
-    .avatar-preview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-    }
 }

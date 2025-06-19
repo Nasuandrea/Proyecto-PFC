@@ -14,9 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const telefono = document.getElementById("telefono");
     const direccion = document.getElementById("direccion");
     const fechaNacimiento = document.getElementById("fechaNacimiento");
-    const avatarInput = document.getElementById("avatar");
-    const avatarPreview = document.getElementById("avatar-preview");
-    const uploadBtn = document.getElementById("uploadAvatarBtn");
 
     try {
         const res = await fetch(`${API_BASE_URL}/api/usuario/me`, {
@@ -30,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             telefono.value = u.telefono || "";
             direccion.value = u.direccion || "";
             if (u.fechaNacimiento) fechaNacimiento.value = u.fechaNacimiento;
-            if (u.avatarUrl) avatarPreview.src = u.avatarUrl;
         }
     } catch (err) {
         console.error(err);
@@ -59,26 +55,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (err) {
             console.error(err);
             alert("Error al actualizar");
-        }
-    });
-
-    uploadBtn.addEventListener("click", async e => {
-        e.preventDefault();
-        if (!avatarInput.files.length) return;
-        const data = new FormData();
-        data.append("file", avatarInput.files[0]);
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/usuario/avatar`, {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${token}` },
-                body: data
-            });
-            if (!res.ok) throw new Error();
-            const url = await res.text();
-            avatarPreview.src = url;
-        } catch (err) {
-            console.error(err);
-            alert("Error al subir avatar");
         }
     });
 });
