@@ -107,17 +107,16 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        if (!usuario.isPresent()) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        // Detach contracts from the user so historical records remain
-        List<Contrato> contratos = contratoRepository.findByUsuarioId(id);
-        for (Contrato c : contratos) {
-            c.setUsuario(null);
-            contratoRepository.save(c);
-        }
-        usuarioRepository.deleteById(id);
+
+        Usuario usuario = usuarioOpt.get();
+
+        // Mark user as inactive instead of removing the record
+        usuario.setActivo(false);
+        usuarioRepository.save(usuario);
         return ResponseEntity.ok().build();
     }
 

@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let editando = false;
     let parteId = null;
     let horaEntrada = null;
+    let horaSalida = null;
     let inicioDescanso = null;
     let finDescanso = null;
 
@@ -39,6 +40,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         return `${pad(h)}:${pad(m)}`;
     }
 
+    function formatTime(date) {
+        return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
     nuevoBtn.addEventListener("click", () => {
         form.reset();
         horaEntrada = null;
@@ -53,23 +58,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     entradaBtn.addEventListener("click", () => {
         horaEntrada = new Date();
         document.getElementById("fecha").value = horaEntrada.toISOString().split('T')[0];
+        document.getElementById("horaEntrada").value = formatTime(horaEntrada);
     });
 
     inicioDescansoBtn.addEventListener("click", () => {
         inicioDescanso = new Date();
+        document.getElementById("horaInicioDescanso").value = formatTime(inicioDescanso);
     });
 
     finDescansoBtn.addEventListener("click", () => {
         if (!inicioDescanso) return;
         finDescanso = new Date();
+        document.getElementById("horaFinDescanso").value = formatTime(finDescanso);
         const diff = finDescanso - inicioDescanso;
         document.getElementById("descanso").value = formatDuration(diff);
     });
 
     salidaBtn.addEventListener("click", () => {
         if (!horaEntrada) return;
-        const salida = new Date();
-        let diff = salida - horaEntrada;
+        horaSalida = new Date();
+        document.getElementById("horaSalida").value = formatTime(horaSalida);
+        let diff = horaSalida - horaEntrada;
         if (inicioDescanso && finDescanso) {
             diff -= (finDescanso - inicioDescanso);
         }

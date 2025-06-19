@@ -120,6 +120,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 rolTd.textContent = u.rol?.nombre || 'Sin rol';
                 tr.appendChild(rolTd);
 
+                const estadoTd = document.createElement("td");
+                estadoTd.textContent = u.activo ? "Activo" : "Inactivo";
+                tr.appendChild(estadoTd);
+
+                if (!u.activo) {
+                    tr.classList.add("usuario-inactivo");
+                }
+
                 const accionesTd = document.createElement("td");
                 accionesTd.classList.add("acciones");
 
@@ -166,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function eliminar(id) {
-        if (confirm("¿Estás seguro de eliminar este usuario?")) {
+        if (confirm("¿Estás seguro de desactivar este usuario?")) {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/usuario/${id}`, {
                     method: "DELETE",
@@ -176,8 +184,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (response.status === 403) {
                     alert("No tienes permisos para eliminar este usuario.");
                 } else if (response.status === 200) {
-                    alert("Usuario eliminado correctamente.");
-                    cargarUsuarios(); // Recargar la lista de usuarios después de la eliminación
+                    alert("Usuario desactivado correctamente.");
+                    cargarUsuarios(); // Recargar la lista de usuarios después de la desactivación
                 } else {
                     alert("Error al eliminar el usuario. Código de estado: " + response.status);
                 }
