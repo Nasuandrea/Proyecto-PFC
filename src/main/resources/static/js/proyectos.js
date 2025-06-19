@@ -17,13 +17,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const horasTotalesInput = document.getElementById("horasTotales");
     const observacionesRow = document.getElementById("observacionesRow");
     const observacionesInput = document.getElementById("observaciones");
+    const trabajadoresSelect = document.getElementById("trabajadoresDisponibles");
+    const trabajadoresLista = document.getElementById("trabajadoresAsignados");
+    const asignarTrabajadorBtn = document.getElementById("asignarTrabajadorBtn");
 
     crearBtn.style.display = "inline-block";
     guardarBtn.style.display = "none";
     cancelarBtn.style.display = "none";
     horasTotalesInput.style.display = "none";
 
+    asignarTrabajadorBtn.addEventListener("click", asignarTrabajador);
+
     let editando = false;
+    let editId = null;
 
     cargarProyectos();
 
@@ -88,12 +94,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelarBtn.addEventListener("click", () => {
         form.reset();
         editando = false;
+        editId = null;
         crearBtn.style.display = "inline-block";
         guardarBtn.style.display = "none";
         cancelarBtn.style.display = "none";
         observacionesInput.value = "";
         observacionesRow.style.display = "none";
         horasTotalesInput.style.display = "none";
+        trabajadoresLista.innerHTML = "";
+        trabajadoresSelect.innerHTML = '<option value="">Seleccionar Trabajador</option>';
     });
 
     async function cargarProyectos() {
@@ -147,6 +156,70 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("No es posible eliminar este proyecto.");
     }
 
+    async function cargarTrabajadoresProyecto(id) {
+        try {
+            const resInfo = await fetch(`${API_BASE_URL}/api/proyectos/${id}/info`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const info = await resInfo.json();
+            const asignados = info.trabajadores || [];
+            trabajadoresLista.innerHTML = "";
+            asignados.forEach(t => {
+                const li = document.createElement("li");
+                li.textContent = `${t.nombre} ${t.apellidos}`;
+                const del = document.createElement("span");
+                del.innerHTML = "🗑️";
+                del.style.cursor = "pointer";
+                del.title = "Desasignar";
+                del.onclick = () => desasignarTrabajador(id, t.id);
+                li.appendChild(del);
+                trabajadoresLista.appendChild(li);
+            });
+
+            const resUsuarios = await fetch(`${API_BASE_URL}/api/usuario`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            const usuarios = await resUsuarios.json();
+            trabajadoresSelect.innerHTML = '<option value="">Seleccionar Trabajador</option>';
+            usuarios.forEach(u => {
+                if (!asignados.some(a => a.id === u.id)) {
+                    const option = document.createElement("option");
+                    option.value = u.id;
+                    option.textContent = `${u.nombre} ${u.apellidos}`;
+                    trabajadoresSelect.appendChild(option);
+                }
+            });
+        } catch (err) {
+            console.error("Error al cargar trabajadores", err);
+        }
+    }
+
+    async function asignarTrabajador() {
+        if (!editId || !trabajadoresSelect.value) return;
+        try {
+            await fetch(`${API_BASE_URL}/api/proyectos/${editId}/trabajadores/${trabajadoresSelect.value}`, {
+                method: 'POST',
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            trabajadoresSelect.value = '';
+            await cargarTrabajadoresProyecto(editId);
+        } catch (err) {
+            console.error("Error al asignar trabajador", err);
+        }
+    }
+
+    async function desasignarTrabajador(proyectoId, usuarioId) {
+        try {
+            await fetch(`${API_BASE_URL}/api/proyectos/${proyectoId}/trabajadores/${usuarioId}`, {
+                method: 'DELETE',
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            await cargarTrabajadoresProyecto(proyectoId);
+        } catch (err) {
+            console.error("Error al desasignar trabajador", err);
+        }
+    }
+
     window.editar = (proyecto) => {
         document.getElementById("proyectoId").value = proyecto.id;
         document.getElementById("nombre").value = proyecto.nombre;
@@ -161,5 +234,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         cancelarBtn.style.display = "inline-block";
         observacionesRow.style.display = "flex";
         editando = true;
+        editId = proyecto.id;
+        cargarTrabajadoresProyecto(proyecto.id);
     };
 });

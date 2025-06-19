@@ -203,11 +203,16 @@ th {
     margin-top: 20px;
 }
 
+.lista-trabajadores-asignados {
+    margin-top: 20px;
+}
+
 #listaUsuarios,
 #listaProyectos,
 #listaParteHoras,
 #listaAusencias,
-#proyectosAsignados {
+#proyectosAsignados,
+#trabajadoresAsignados {
     list-style-type: none;
     padding: 0;
 }
@@ -227,6 +232,17 @@ th {
 }
 
 #proyectosAsignados li {
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+#trabajadoresAsignados li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px;
     background: #fff;
     border: 1px solid #ccc;

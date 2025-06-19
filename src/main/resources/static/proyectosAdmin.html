@@ -38,6 +38,16 @@
                 <textarea id="observaciones" placeholder="Observaciones"></textarea>
             </div>
             <div class="form-row">
+                <select id="trabajadoresDisponibles">
+                    <option value="">Seleccionar Trabajador</option>
+                </select>
+                <button type="button" id="asignarTrabajadorBtn">Asignar</button>
+            </div>
+            <div class="lista-trabajadores-asignados">
+                <h3>Trabajadores Asignados</h3>
+                <ul id="trabajadoresAsignados"></ul>
+            </div>
+            <div class="form-row">
                 <button type="submit" id="crearBtn">Crear Proyecto</button>
                 <button type="submit" id="guardarBtn" style="display:none;">Guardar</button>
                 <button type="button" id="cancelarBtn" style="display:none;">Cancelar</button>
