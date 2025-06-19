@@ -43,7 +43,8 @@ public class SecurityConfig {
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/usuario/me", "/css/**", "/js/**", "/images/**", "/favicon.ico", "/index.html", "/**.html").permitAll() // Permitir rutas públicas                        .requestMatchers("/api/usuario/**").hasAnyRole("ADMIN", "USUARIO")  // Los usuarios y administradores pueden acceder a sus datos
+                        .requestMatchers("/api/auth/**", "/api/usuario/me", "/css/**", "/js/**", "/images/**", "/partials/**", "/icons/**", "/favicon.ico", "/index.html", "/**.html").permitAll() // Permitir rutas públicas
+                        .requestMatchers("/api/usuario/**").hasAnyRole("ADMIN", "USUARIO")  // Los usuarios y administradores pueden acceder a sus datos
                         .requestMatchers("/api/parte/**").hasAnyRole("ADMIN", "USUARIO")  // Los usuarios y administradores pueden acceder a crear/editar partes
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo los administradores pueden acceder a rutas de administración
                         .requestMatchers("/api/ausencias/**").hasRole("ADMIN")  // Solo administradores pueden gestionar ausencias
