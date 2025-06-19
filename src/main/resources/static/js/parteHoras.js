@@ -39,6 +39,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                 proyectoTd.textContent = p.proyecto?.nombre || "";
                 tr.appendChild(proyectoTd);
 
+                const entradaTd = document.createElement("td");
+                entradaTd.textContent = p.horaEntrada;
+                tr.appendChild(entradaTd);
+
+                const salidaTd = document.createElement("td");
+                salidaTd.textContent = p.horaSalida;
+                tr.appendChild(salidaTd);
+
+                const inicioDescansoTd = document.createElement("td");
+                inicioDescansoTd.textContent = p.horaInicioDescanso;
+                tr.appendChild(inicioDescansoTd);
+
+                const finDescansoTd = document.createElement("td");
+                finDescansoTd.textContent = p.horaFinDescanso;
+                tr.appendChild(finDescansoTd);
+
                 const horasTd = document.createElement("td");
                 horasTd.textContent = p.horasTrabajadas;
                 tr.appendChild(horasTd);
@@ -75,6 +91,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         parteId = parte.id;
         document.getElementById("parteId").value = parte.id;
         document.getElementById("fecha").value = parte.fecha;
+        document.getElementById("horaEntrada").value = parte.horaEntrada;
+        document.getElementById("horaSalida").value = parte.horaSalida;
+        document.getElementById("horaInicioDescanso").value = parte.horaInicioDescanso;
+        document.getElementById("horaFinDescanso").value = parte.horaFinDescanso;
         document.getElementById("horasTrabajadas").value = parte.horasTrabajadas;
         document.getElementById("descanso").value = parte.descanso;
         proyectoSelect.value = parte.proyecto?.id || "";
@@ -135,6 +155,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const parte = {
             fecha: document.getElementById("fecha").value,
+            horaEntrada: document.getElementById("horaEntrada").value,
+            horaSalida: document.getElementById("horaSalida").value,
+            horaInicioDescanso: document.getElementById("horaInicioDescanso").value,
+            horaFinDescanso: document.getElementById("horaFinDescanso").value,
             horasTrabajadas: document.getElementById("horasTrabajadas").value,
             descanso: document.getElementById("descanso").value,
             proyecto: {id: proyectoId} // Proyecto ID debe ser enviado correctamente

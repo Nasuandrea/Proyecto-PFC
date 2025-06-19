@@ -22,9 +22,20 @@ public class Parte {
     @Column(name = "horas_trabajadas")
     private LocalTime horasTrabajadas;
 
-    // Usamos LocalTime para manejar el descanso en horas:minutos
+    @Column(name = "hora_entrada")
+    private LocalTime horaEntrada;
+
+    @Column(name = "hora_salida")
+    private LocalTime horaSalida;
+
+    @Column(name = "hora_inicio_descanso")
+    private LocalTime horaInicioDescanso;
+
+    @Column(name = "hora_fin_descanso")
+    private LocalTime horaFinDescanso;
+
     @Column(name = "descanso")
-    private LocalTime descanso;  // Cambio a LocalTime
+    private LocalTime descanso;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)

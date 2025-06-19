@@ -76,8 +76,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tr.innerHTML = `
                     <td>${p.fecha}</td>
                     <td>${trabajador}</td>
-                    <td>${p.horasTrabajadas}</td>
-                    <td>${p.descanso}</td>`;
+                    <td>${p.horaEntrada}</td>
+                    <td>${p.horaSalida}</td>
+                    <td>${p.horaInicioDescanso}</td>
+                    <td>${p.horaFinDescanso}</td>
+                    <td>${p.descanso}</td>
+                    <td>${p.horasTrabajadas}</td>`;
                 tablaPartesBody.appendChild(tr);
             });
 
