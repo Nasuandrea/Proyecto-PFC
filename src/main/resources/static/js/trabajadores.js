@@ -22,14 +22,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Filtrar trabajadores según el cuadro de búsqueda
     searchInput.addEventListener("input", () => {
         const searchValue = searchInput.value.toLowerCase();
-        const items = document.querySelectorAll("#listaUsuarios li");
+        const filas = document.querySelectorAll("#listaUsuarios tr");
 
-        items.forEach(item => {
-            const nombre = item.querySelector(".info").textContent.toLowerCase();
-            if (nombre.includes(searchValue)) {
-                item.style.display = "flex";
+        filas.forEach(fila => {
+            const nombre = fila.cells[0]?.textContent.toLowerCase() || "";
+            const apellidos = fila.cells[1]?.textContent.toLowerCase() || "";
+            const id = fila.dataset.id ? fila.dataset.id.toLowerCase() : "";
+            const texto = `${nombre} ${apellidos} ${id}`;
+
+            if (texto.includes(searchValue)) {
+                fila.style.display = "";
             } else {
-                item.style.display = "none";
+                fila.style.display = "none";
             }
         });
     });
@@ -102,6 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             lista.innerHTML = "";
             usuarios.forEach(u => {
                 const tr = document.createElement("tr");
+                tr.dataset.id = u.id;
 
                 const nombreTd = document.createElement("td");
                 nombreTd.textContent = u.nombre;
