@@ -7,60 +7,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<header class="header">
-    <h1>HR Manager</h1>
-    <span id="mensaje-usuario">Cargando datos...</span>
-    <div class="profile-container">
-        <img id="profile-icon" class="profile-icon" src="/icons/user.png" alt="perfil">
-        <div id="profile-dropdown" class="profile-dropdown">
-            <p id="dropdown-email"></p>
-            <a href="perfil.html">Mi perfil</a>
-            <a href="cambiarPassword.html">Cambiar contraseña</a>
-            <a href="#" id="logout-link">Cerrar sesión</a>
-        </div>
-    </div>
-</header>
+<div id="header-container"></div>
 <div class="page-content">
-<div class="sidebar">
-    <a href="parteHoras.html" class="comun">Parte Horas</a>
-    <a href="parteAusencias.html" class="comun">Parte Ausencias</a>
-    <a href="trabajadoresAdmin.html" class="admin">Trabajadores</a>
-    <a href="proyectosAdmin.html" class="admin">Proyectos</a>
-    <a href="ausenciasAdmin.html" class="admin">Ausencias</a>
-    <a href="contratosAdmin.html" class="admin">Contratos</a>
-    <a href="documentosAdmin.html" class="admin">Documentos</a>
-    <a href="historialTrabajador.html" class="admin">Historial Trabajador</a>
-    <a href="historialProyecto.html" class="admin">Historial Proyecto</a>
-    <a href="login.html">Cerrar Sesión</a>
-</div>
-
-<div class="main-content">
-    <div class="contenedor-principal">
-        <h1>Gestionar Ausencias</h1>
-        <div class="lista-ausencias">
-            <table id="tablaAusencias">
-                <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Fecha inicio</th>
-                    <th>Fecha fin</th>
-                    <th>Tipo</th>
-                    <th>Motivo</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+<div id="sidebar-container"></div>
+    <div class="main-content">
+        <div class="contenedor-principal">
+            <h1>Gestionar Ausencias</h1>
+            <div class="lista-ausencias">
+                <table id="tablaAusencias">
+                    <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha fin</th>
+                        <th>Tipo</th>
+                        <th>Motivo</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <footer class="footer">
     <p>&copy; 2025 HR Manager</p>
 </footer>
 
-<script type="module" src="js/ausenciasAdmin.js"></script>
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/auth.js"></script>
 <script type="module" src="js/header.js"></script>
+<script type="module" src="js/ausenciasAdmin.js"></script>
 </body>
 </html>

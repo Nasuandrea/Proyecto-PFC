@@ -1,5 +1,4 @@
-import { API_BASE_URL } from "./api.js";
-
+import { initAuth } from "./auth.js";
 async function init() {
     const mensaje = document.getElementById("mensaje-usuario");
     const icon = document.getElementById("profile-icon");
@@ -7,28 +6,11 @@ async function init() {
     const emailField = document.getElementById("dropdown-email");
     const logoutLink = document.getElementById("logout-link");
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-        if (mensaje) mensaje.textContent = "No hay token. Redirigiendo al login...";
-        window.location.href = "login.html";
-        return;
-    }
-
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/usuario/me`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error("No autorizado");
-        const user = await res.json();
-        if (mensaje) mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
-        if (emailField) emailField.textContent = user.correo || "";
-        if (icon) icon.src = user.rol.nombre === "ADMIN" ? "/icons/admin.png" : "/icons/user.png";
-    } catch (err) {
-        if (mensaje) mensaje.textContent = "Error de autenticación";
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-        return;
-    }
+    const user = await initAuth();
+    if (!user) return;
+    if (mensaje) mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
+    if (emailField) emailField.textContent = user.correo || "";
+    if (icon) icon.src = user.rol.nombre === "ADMIN" ? "/icons/admin.png" : "/icons/user.png";
 
     const container = document.querySelector('.profile-container');
     if (container && dropdown) {
@@ -48,4 +30,4 @@ async function init() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("layoutLoaded", init);

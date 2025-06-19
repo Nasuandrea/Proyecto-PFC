@@ -1,48 +1,9 @@
 import { API_BASE_URL } from "./api.js";
+import { initAuth } from "./auth.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
-    const mensaje = document.getElementById("mensaje-usuario");
-    let esAdmin = false;
-
-    if (!token) {
-        mensaje.textContent = "No hay token. Redirigiendo al login...";
-        window.location.href = "login.html";
-        return;
-    }
-
-    try {
-        // Verificamos la información del usuario
-        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error("No autorizado");
-        }
-
-        const user = await response.json();
-        esAdmin = user.rol.nombre === "ADMIN";
-        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
-
-        // Mostrar u ocultar elementos del sidebar según el rol
-        if (user.rol.nombre === "ADMIN") {
-            // Si es admin, mostrar todos los elementos
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "block");
-            document.querySelectorAll(".user").forEach(e => e.style.display = "block");
-        } else {
-            // Si es usuario, ocultar las secciones de admin
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "none");
-            document.querySelectorAll(".user").forEach(e => e.style.display = "block");
-        }
-
-    } catch (error) {
-        mensaje.textContent = "Error de autenticación";
-        console.error(error);
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-    }
+    const user = await initAuth();
+    if (!user) return;
     const form = document.getElementById("solicitarAusenciaForm");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");

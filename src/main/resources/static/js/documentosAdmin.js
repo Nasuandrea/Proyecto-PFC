@@ -1,35 +1,13 @@
 import { API_BASE_URL } from "./api.js";
+import { initAuth } from "./auth.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
-    const mensaje = document.getElementById("mensaje-usuario");
     const tbody = document.querySelector("#tablaDocumentos tbody");
     const form = document.getElementById("documentoForm");
     const usuarioSelect = document.getElementById("usuarioSelect");
 
-    if (!token) {
-        mensaje.textContent = "No hay token. Redirigiendo al login...";
-        window.location.href = "login.html";
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (!response.ok) throw new Error("No autorizado");
-        const user = await response.json();
-        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
-        if (user.rol.nombre === "ADMIN") {
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "block");
-        } else {
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "none");
-        }
-    } catch (err) {
-        mensaje.textContent = "Error de autenticación";
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-        return;
-    }
+    const user = await initAuth();
+    if (!user) return;
 
     cargarUsuarios();
     cargarDocumentos();

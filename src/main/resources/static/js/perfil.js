@@ -1,11 +1,13 @@
++10
+-20
+
 import { API_BASE_URL } from "./api.js";
+import { initAuth } from "./auth.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
-    if (!token) {
-        window.location.href = "login.html";
-        return;
-    }
+    const userData = await initAuth();
+    if (!userData) return;
 
     const form = document.getElementById("perfilForm");
     const nombre = document.getElementById("nombre");
@@ -15,22 +17,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const direccion = document.getElementById("direccion");
     const fechaNacimiento = document.getElementById("fechaNacimiento");
 
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/usuario/me`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (res.ok) {
-            const u = await res.json();
-            nombre.value = u.nombre || "";
-            apellidos.value = u.apellidos || "";
-            correo.value = u.correo || "";
-            telefono.value = u.telefono || "";
-            direccion.value = u.direccion || "";
-            if (u.fechaNacimiento) fechaNacimiento.value = u.fechaNacimiento;
-        }
-    } catch (err) {
-        console.error(err);
-    }
+    const u = userData;
+    nombre.value = u.nombre || "";
+    apellidos.value = u.apellidos || "";
+    correo.value = u.correo || "";
+    telefono.value = u.telefono || "";
+    direccion.value = u.direccion || "";
+    if (u.fechaNacimiento) fechaNacimiento.value = u.fechaNacimiento;
 
     form.addEventListener("submit", async e => {
         e.preventDefault();

@@ -1,7 +1,7 @@
 import {API_BASE_URL} from "./api.js";
+import { initAuth } from "./auth.js";
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
-    const mensaje = document.getElementById("mensaje-usuario");
     const usuarioSelect = document.getElementById("usuarioSelect");
     const infoTrabajador = document.getElementById("infoTrabajador");
     const tablaPartesBody = document.getElementById("tablaPartesBody");
@@ -11,33 +11,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tablaHistorialBody = document.getElementById("tablaHistorialBody");
     const tablaDocumentosBody = document.getElementById("tablaDocumentosBody");
 
-    if (!token) {
-        mensaje.textContent = "No hay token. Redirigiendo al login...";
-        window.location.href = "login.html";
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/usuario/me`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        if (!response.ok) {
-            throw new Error("No autorizado");
-        }
-        const user = await response.json();
-        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
-        if (user.rol.nombre === "ADMIN") {
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "block");
-        } else {
-            document.querySelectorAll(".admin").forEach(e => e.style.display = "none");
-        }
-        cargarUsuarios();
-    } catch (error) {
-        mensaje.textContent = "Error de autenticación";
-        console.error(error);
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-    }
+    const user = await initAuth();
+    if (!user) return;
+    cargarUsuarios();
 
     usuarioSelect.addEventListener("change", cargarInfo);
 
