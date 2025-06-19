@@ -1,6 +1,6 @@
 package com.hrmanager.config;
 
-import com.hrmanager.service.JwtFilter;
+import com.hrmanager.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

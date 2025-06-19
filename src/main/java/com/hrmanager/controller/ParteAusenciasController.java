@@ -1,10 +1,9 @@
 package com.hrmanager.controller;
 
 import com.hrmanager.model.Ausencia;
-import com.hrmanager.model.Rol;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.service.AusenciaService;
-import com.hrmanager.service.JwtService;
+import com.hrmanager.security.JwtService;
 import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

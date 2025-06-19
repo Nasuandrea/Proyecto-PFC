@@ -7,7 +7,7 @@ import com.hrmanager.model.Rol;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.repository.RolRepository;
 import com.hrmanager.repository.UsuarioRepository;
-import com.hrmanager.service.JwtService;
+import com.hrmanager.security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

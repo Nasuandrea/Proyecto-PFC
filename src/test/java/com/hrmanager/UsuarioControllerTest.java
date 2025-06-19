@@ -4,7 +4,7 @@ import com.hrmanager.controller.UsuarioController;
 import com.hrmanager.dto.ActualizarPerfilDTO;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.repository.*;
-import com.hrmanager.service.JwtService;
+import com.hrmanager.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -4,7 +4,7 @@ import com.hrmanager.model.Parte;
 import com.hrmanager.model.Proyecto;
 import com.hrmanager.model.Usuario;
 import com.hrmanager.service.ParteService;
-import com.hrmanager.service.JwtService;
+import com.hrmanager.security.JwtService;
 import com.hrmanager.repository.ProyectoRepository;
 import com.hrmanager.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.hrmanager.service;
+package com.hrmanager.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

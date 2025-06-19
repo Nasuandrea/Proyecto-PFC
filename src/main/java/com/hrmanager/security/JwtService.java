@@ -1,4 +1,4 @@
-package com.hrmanager.service;
+package com.hrmanager.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
