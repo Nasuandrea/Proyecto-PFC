@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.List;
 
 @Entity
@@ -30,7 +30,7 @@ public class Proyecto {
     private Integer horasEstimadas;
 
     @Column(name = "horas_totales")
-    private LocalTime horasTotales;
+    private Duration horasTotales;
 
     @ManyToMany
     @JoinTable(
@@ -96,11 +96,11 @@ public class Proyecto {
         this.trabajadores = trabajadores;
     }
 
-    public LocalTime getHorasTotales() {
+    public Duration getHorasTotales() {
         return horasTotales;
     }
 
-    public void setHorasTotales(LocalTime horasTotales) {
+    public void setHorasTotales(Duration horasTotales) {
         this.horasTotales = horasTotales;
     }
 }

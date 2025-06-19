@@ -1,5 +1,15 @@
 import {API_BASE_URL} from "./api.js";
 import { initAuth } from "./auth.js";
+
+function formatDurationISO(iso) {
+    if (!iso) return "";
+    const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+    if (!m) return "";
+    const h = String(parseInt(m[1] || 0)).padStart(2, '0');
+    const min = String(parseInt(m[2] || 0)).padStart(2, '0');
+    return `${h}:${min}`;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     let esAdmin = false;
@@ -227,7 +237,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("fechaInicio").value = proyecto.fechaInicio;
         document.getElementById("fechaFin").value = proyecto.fechaFin;
         horasEstimadasInput.value = proyecto.horasEstimadas || "";
-        horasTotalesInput.value = proyecto.horasTotales || "";
+        horasTotalesInput.value = formatDurationISO(proyecto.horasTotales);
         horasTotalesInput.style.display = "inline-block";
         crearBtn.style.display = "none";
         guardarBtn.style.display = "inline-block";

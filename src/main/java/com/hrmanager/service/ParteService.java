@@ -84,17 +84,18 @@ public class ParteService {
 
     private void updateHorasTotales(Long proyectoId) {
         List<Parte> partes = parteRepository.findByProyectoId(proyectoId);
-        LocalTime totalHoras = LocalTime.of(0, 0, 0);
+        Duration total = Duration.ZERO;
         for (Parte parte : partes) {
-            totalHoras = totalHoras.plusHours(parte.getHorasTrabajadas().getHour())
+            Duration d = Duration.ofHours(parte.getHorasTrabajadas().getHour())
                     .plusMinutes(parte.getHorasTrabajadas().getMinute())
                     .plusSeconds(parte.getHorasTrabajadas().getSecond());
+            total = total.plus(d);
         }
 
         // Actualizar el proyecto con el total de horas trabajadas
-        LocalTime finalTotalHoras = totalHoras;
+        Duration finalTotal = total;
         proyectoRepository.findById(proyectoId).ifPresent(proyecto -> {
-            proyecto.setHorasTotales(finalTotalHoras);
+            proyecto.setHorasTotales(finalTotal);
             proyectoRepository.save(proyecto);
         });
     }

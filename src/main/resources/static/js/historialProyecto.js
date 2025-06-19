@@ -1,5 +1,14 @@
 import {API_BASE_URL} from "./api.js";
 import { initAuth } from "./auth.js";
+
+function formatDurationISO(iso) {
+    if (!iso) return "";
+    const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+    if (!m) return "";
+    const h = String(parseInt(m[1] || 0)).padStart(2, '0');
+    const min = String(parseInt(m[2] || 0)).padStart(2, '0');
+    return `${h}:${min}`;
+}
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     const proyectoSelect = document.getElementById("proyectoSelect");
@@ -56,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p><strong>Inicio:</strong> ${proyectoInfo.fechaInicio || ""}</p>
                 <p><strong>Fin:</strong> ${proyectoInfo.fechaFin || ""}</p>
                 <p><strong>Horas estimadas:</strong> ${proyectoInfo.horasEstimadas || ""}</p>
-                <p><strong>Horas totales:</strong> ${proyectoInfo.horasTotales || ""}</p>
+                <p><strong>Horas totales:</strong> ${formatDurationISO(proyectoInfo.horasTotales)}</p>
             `;
 
             tablaTrabajadoresBody.innerHTML = "";
