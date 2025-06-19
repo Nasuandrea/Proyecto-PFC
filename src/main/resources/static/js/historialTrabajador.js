@@ -56,7 +56,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <p><strong>Teléfono:</strong> ${u.telefono || ""}</p>
                 <p><strong>Dirección:</strong> ${u.direccion || ""}</p>
                 <p><strong>DNI:</strong> ${u.dni || ""}</p>
-                <p><strong>Fecha Nacimiento:</strong> ${u.fechaNacimiento || ""}</p>`;
+                <p><strong>Fecha Nacimiento:</strong> ${u.fechaNacimiento || ""}</p>
+                <p><strong>Activo:</strong> ${u.activo ? 'Sí' : 'No'}</p>`;
+
+            if (!u.activo) {
+                infoTrabajador.classList.add("usuario-inactivo");
+            } else {
+                infoTrabajador.classList.remove("usuario-inactivo");
+            }
             tablaPartesBody.innerHTML = "";
             info.partes.forEach(p => {
                 const tr = document.createElement("tr");

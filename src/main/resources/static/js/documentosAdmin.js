@@ -66,6 +66,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 usuarioTd.textContent = `${d.usuario?.nombre || ''} ${d.usuario?.apellidos || ''}`;
                 tr.appendChild(usuarioTd);
 
+                const estadoTd = document.createElement("td");
+                estadoTd.textContent = d.usuario?.activo ? "Activo" : "Inactivo";
+                tr.appendChild(estadoTd);
+                if (!d.usuario?.activo) {
+                    tr.classList.add("usuario-inactivo");
+                }
+
                 const nombreTd = document.createElement("td");
                 nombreTd.textContent = d.nombreArchivo;
                 tr.appendChild(nombreTd);

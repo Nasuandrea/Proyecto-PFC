@@ -17,4 +17,5 @@ public class RegisterRequest {
     private String direccion;
     private LocalDate fechaNacimiento;
     private String rol; // "ADMIN" o "USUARIO"
+    private Boolean activo;
 }

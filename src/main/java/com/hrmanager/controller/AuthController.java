@@ -76,7 +76,7 @@ public class AuthController {
         nuevo.setTelefono(req.getTelefono());
         nuevo.setDireccion(req.getDireccion());
         nuevo.setFechaNacimiento(req.getFechaNacimiento());
-        nuevo.setActivo(true);
+        nuevo.setActivo(req.getActivo() == null ? true : req.getActivo());
         nuevo.setRol(rol);
 
         usuarioRepository.save(nuevo);

@@ -11,5 +11,6 @@ public class UsuarioDTO {
     public String fechaNacimiento;
     public String rol;  // "ADMIN" o "USUARIO"
     public Long proyectoId;  // ID del proyecto asignado
+    public Boolean activo;
 }
 

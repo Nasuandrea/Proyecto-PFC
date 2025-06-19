@@ -8,7 +8,10 @@ async function init() {
 
     const user = await initAuth();
     if (!user) return;
-    if (mensaje) mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
+    if (mensaje) {
+        mensaje.textContent = `${user.nombre} (${user.rol.nombre}) - ${user.activo ? "Activo" : "Inactivo"}`;
+        if (!user.activo) mensaje.classList.add("usuario-inactivo");
+    }
     if (emailField) emailField.textContent = user.correo || "";
     if (icon) icon.src = user.rol.nombre === "ADMIN" ? "/icons/admin.png" : "/icons/user.png";
 

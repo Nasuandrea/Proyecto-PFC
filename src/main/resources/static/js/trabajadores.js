@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.getElementById("searchTrabajadores");
     const proyectosSelect = document.getElementById("proyectosDisponibles");
     const proyectosAsignadosLista = document.getElementById("proyectosAsignados");
+    const activoSelect = document.getElementById("activo");
 
     let editando = false;
 
@@ -51,7 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             direccion: document.getElementById("direccion").value,
             fechaNacimiento: document.getElementById("fechaNacimiento").value,
             rol: document.getElementById("rol").value,
-            proyectoId: proyectosSelect.value // Proyecto asignado
+            proyectoId: proyectosSelect.value, // Proyecto asignado
+            activo: activoSelect.value === "true"
         };
 
         try {
@@ -206,6 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("direccion").value = usuario.direccion || "";
         document.getElementById("fechaNacimiento").value = usuario.fechaNacimiento || "";
         document.getElementById("rol").value = usuario.rol?.nombre || "USUARIO";
+        activoSelect.value = usuario.activo ? "true" : "false";
 
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";

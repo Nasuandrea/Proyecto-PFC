@@ -65,7 +65,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 tr.innerHTML = `
                     <td>${t.nombre}</td>
                     <td>${t.apellidos}</td>
-                    <td>${t.correo}</td>`;
+                    <td>${t.correo}</td>
+                    <td>${t.activo ? "Activo" : "Inactivo"}</td>`;
+                if (!t.activo) {
+                    tr.classList.add("usuario-inactivo");
+                }
                 tablaTrabajadoresBody.appendChild(tr);
             });
 

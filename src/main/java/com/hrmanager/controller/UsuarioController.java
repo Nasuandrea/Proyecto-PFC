@@ -187,6 +187,7 @@ public class UsuarioController {
             usuario.setDireccion(dto.direccion);
             usuario.setFechaNacimiento(LocalDate.parse(dto.fechaNacimiento));
             usuario.setPassword(passwordEncoder.encode(dto.password));
+            usuario.setActivo(dto.activo);
 
             // Buscar el rol por nombre
             Rol.RolNombre rolNombre = Rol.RolNombre.valueOf(dto.rol);  // Convierte "ADMIN" a RolNombre.ADMIN
@@ -227,6 +228,7 @@ public class UsuarioController {
         usuario.setDireccion(dto.direccion);
         usuario.setFechaNacimiento(LocalDate.parse(dto.fechaNacimiento));
         usuario.setPassword(passwordEncoder.encode(dto.password));
+        usuario.setActivo(dto.activo);
 
         // Asignar el rol
         Rol.RolNombre rolNombre = Rol.RolNombre.valueOf(dto.rol);

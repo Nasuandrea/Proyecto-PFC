@@ -105,6 +105,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 usuarioTd.textContent = `${c.usuario?.nombre || ''} ${c.usuario?.apellidos || ''}`;
                 tr.appendChild(usuarioTd);
 
+                const estadoTd = document.createElement("td");
+                estadoTd.textContent = c.usuario?.activo ? "Activo" : "Inactivo";
+                tr.appendChild(estadoTd);
+
+                if (!c.usuario?.activo) {
+                    tr.classList.add("usuario-inactivo");
+                }
+
                 const tipoTd = document.createElement("td");
                 tipoTd.textContent = c.tipo;
                 tr.appendChild(tipoTd);
