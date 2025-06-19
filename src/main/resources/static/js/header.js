@@ -22,7 +22,7 @@ async function init() {
         const user = await res.json();
         if (mensaje) mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
         if (emailField) emailField.textContent = user.correo || "";
-        if (icon) icon.src = user.rol.nombre === "ADMIN" ? "icons/admin.png" : "icons/user.png";
+        if (icon) icon.src = user.rol.nombre === "ADMIN" ? "/icons/admin.png" : "/icons/user.png";
     } catch (err) {
         if (mensaje) mensaje.textContent = "Error de autenticación";
         localStorage.removeItem("token");
@@ -32,8 +32,11 @@ async function init() {
 
     const container = document.querySelector('.profile-container');
     if (container && dropdown) {
-        container.addEventListener('mouseenter', () => dropdown.classList.add('show'));
-        container.addEventListener('mouseleave', () => dropdown.classList.remove('show'));
+        container.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', () => dropdown.classList.remove('show'));
     }
 
     if (logoutLink) {
