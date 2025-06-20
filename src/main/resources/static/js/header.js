@@ -9,7 +9,7 @@ async function init() {
     const user = await initAuth();
     if (!user) return;
     if (mensaje) {
-        mensaje.textContent = `${user.nombre} (${user.rol.nombre}) - ${user.activo ? "Activo" : "Inactivo"}`;
+        mensaje.textContent = `${user.nombre} (${user.rol.nombre})`;
         if (!user.activo) mensaje.classList.add("usuario-inactivo");
     }
     if (emailField) emailField.textContent = user.correo || "";

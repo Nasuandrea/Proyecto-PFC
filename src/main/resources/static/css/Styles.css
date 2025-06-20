@@ -51,6 +51,7 @@ th {
     color: white;
     padding: 20px;
     align-self: stretch;
+    box-sizing: border-box;
 }
 
 .sidebar h2 {
@@ -68,6 +69,26 @@ th {
 
 .sidebar a:hover {
     background-color: #34495e;
+}
+.sidebar a.active {
+    background-color: #2980b9;
+}
+
+.sidebar-collapsed {
+    display: none;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 /* ======= HEADER & FOOTER ======= */
@@ -145,6 +166,20 @@ th {
 }
 
 .styled-form button:hover {
+    background-color: #3498db;
+}
+
+#nuevoBtn {
+    padding: 10px 20px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#nuevoBtn:hover {
     background-color: #3498db;
 }
 
@@ -271,12 +306,27 @@ th {
     .page-content {
         flex-direction: column;
     }
+    #sidebar-container {
+        position: relative;
+    }
 
     .sidebar {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
         width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
+        flex-direction: column;
+        background-color: #2c3e50;
+        z-index: 1000;
+    }
+
+    .sidebar.open {
+        display: block;
+    }
+
+    .sidebar-collapsed {
+        display: flex;
     }
 
     .main-content {
