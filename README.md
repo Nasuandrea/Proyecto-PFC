@@ -163,6 +163,7 @@ Modelo en cascada, con fases consecutivas:
 ## 9. ✅ Conclusiones
 HR Manager cumple casi todos los objetivos propuestos, consolidando conocimientos técnicos en seguridad, bases de datos, arquitectura REST y diseño web.
 ### a. Posibles mejoras
+- Mejorar la interfaz de usuario por ejemplo con calendarios y una interfaz más visual.
 - Si uno o varios días de ausencia se solapan con otras solicitudes de ausencias, no se deben crear y salir aviso de "Las solicitudes de ausencias no pueden solaparse"
 - Cuando la fecha fin de proyecto es menor o la fecha inicio proyecto es mayor que la fecha de parte, no debe poder crear el parte y salir aviso de "Fecha fin/inicio de proyecto no puede ser menor/mayor que la fecha de parte"
 - Cuando el empleado no tiene contrato, al loguearse debe salir aviso de "El empleado no tiene contrato: Contacte con un administrador".
