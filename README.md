@@ -163,23 +163,46 @@ Modelo en cascada, con fases consecutivas:
 ## 9. ✅ Conclusiones
 HR Manager cumple casi todos los objetivos propuestos, consolidando conocimientos técnicos en seguridad, bases de datos, arquitectura REST y diseño web.
 ### a. Posibles mejoras
-- Mejorar la interfaz de usuario por ejemplo con calendarios y una interfaz más visual.
-- Si uno o varios días de ausencia se solapan con otras solicitudes de ausencias, no se deben crear y salir aviso de "Las solicitudes de ausencias no pueden solaparse"
-- Cuando la fecha fin de proyecto es menor o la fecha inicio proyecto es mayor que la fecha de parte, no debe poder crear el parte y salir aviso de "Fecha fin/inicio de proyecto no puede ser menor/mayor que la fecha de parte"
-- Cuando el empleado no tiene contrato, al loguearse debe salir aviso de "El empleado no tiene contrato: Contacte con un administrador".
-- Si la fecha Fin de contrato del empleado es menor que la fecha actual, al loguearse debe salir aviso de "Fecha fin de contrato : " + fechaFinContrato + "Contacte con un administrador".
+- Frontend más moderno e intuitivo
+
+ Incorporar un framework como React o Vue, para obtener una interfaz más atractiva y dinámica.
+ 
+También se podrían incluir componentes como calendarios para solicitar ausencias o revisar históricos.
+
+Soporte para múltiples idiomas y accesibilidad
+
+- Exportación de historiales a PDF
+
+Implementar en el backend un servicio que genere PDFs (por ejemplo con la librería iText o similar) y ofrecer un botón de descarga en las páginas de historial.
+
+- Mayor cobertura de pruebas
+
+Pruebas unitarias y de integración en src/test/java para cubrir los principales controladores y servicios. Esto ayudaría a prevenir regresiones.
+
+- Optimizacion de las validaciones  
+
+Validaciones en partes de ausencias y vacaciones con respecto a las fechas duplicadas
+
+Validaciones en partes de horas con respecto a fechas inicio y fin de proyectos y contratos
+
+Validaciones en cambios y creación de contraseñas
+
+Validaciones de formatos y longitudes en los formularios
+
+- Sistema de notificaciones por correo
+
+
+- Subir archivos desde el equipo
+
 
 ### b. Dificultades encontradas
 - Configuración de seguridad JWT
 - Organización modular del código en Spring Boot
-- Gestión de estados asíncronos en el frontend sin frameworks
+- Poco tiempo
 
 ### c. Falta por implementar
 - Exportación de informes/historiales en PDF
-- Sistema de notificaciones por correo
-- Soporte para múltiples idiomas y accesibilidad
-- Subir y descargar documentos desde el servidor
-- Subir archivos desde el equipo
+
 
 ## Visitame en : 
 - https://hr-manager-du56.onrender.com/index.html
