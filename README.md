@@ -156,7 +156,10 @@ Modelo en cascada, con fases consecutivas:
 | Desarrollo Frontend     | VS Code              | Gratuita   | 0 €              |
 | Pruebas REST            | Postman              | Gratuita   | 0 €              |
 | Despliegue en la nube    | Render + Railway     | Gratuita   | 0 €              |
-| **Total Coste Técnico** |                      |            | **0 €**          |
+| Fase                    | horas                | €/hona     | Coste            |
+|-------------------------|----------------------|------------|------------------|
+| Mano obra               |210                   | 15         | 3150 €            |
+| **Total Coste Técnico** |                      |            | **3150€**          |
 
 ---
 
