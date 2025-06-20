@@ -43,12 +43,12 @@ th {
 
 /* ======= SIDEBAR ======= */
 #sidebar-container {
-    background-color: #2c3e50;
+    background-color: #5dade2;
 }
 .sidebar {
     width: 220px;
-    background-color: #2c3e50;
-    color: white;
+    background-color: #5dade2;
+    color: midnightblue;
     padding: 20px;
     align-self: stretch;
     box-sizing: border-box;
@@ -61,23 +61,23 @@ th {
 
 .sidebar a {
     display: block;
-    color: white;
+    color: midnightblue;
     padding: 10px;
     text-decoration: none;
     transition: 0.3s;
 }
 
 .sidebar a:hover {
-    background-color: #34495e;
+    background-color: #7fb3d5;
 }
 .sidebar a.active {
-    background-color: #2980b9;
+    background-color: #85c1e9;
 }
 
 .sidebar-collapsed {
     display: none;
-    background-color: #2c3e50;
-    color: white;
+    background-color: #5dade2;
+    color: midnightblue;
     padding: 10px 20px;
     align-items: center;
     justify-content: space-between;
@@ -86,7 +86,7 @@ th {
 .sidebar-toggle {
     background: none;
     border: none;
-    color: white;
+    color: midnightblue;
     font-size: 24px;
     cursor: pointer;
 }
@@ -94,8 +94,8 @@ th {
 /* ======= HEADER & FOOTER ======= */
 .header,
 .footer {
-    background-color: #2c3e50;
-    color: white;
+    background-color: #5dade2;
+    color: midnightblue;
     padding: 10px 20px;
 }
 
@@ -162,8 +162,8 @@ th {
 
 .styled-form button {
     padding: 10px 20px;
-    background-color: #2980b9;
-    color: white;
+    background-color: #85c1e9;
+    color: midnightblue;
     border: none;
     border-radius: 4px;
     font-weight: bold;
@@ -171,13 +171,13 @@ th {
 }
 
 .styled-form button:hover {
-    background-color: #3498db;
+    background-color: #aed6f1;
 }
 
 #nuevoBtn {
     padding: 10px 20px;
-    background-color: #2980b9;
-    color: white;
+    background-color: #85c1e9;
+    color: midnightblue;
     border: none;
     border-radius: 4px;
     font-weight: bold;
@@ -185,7 +185,7 @@ th {
 }
 
 #nuevoBtn:hover {
-    background-color: #3498db;
+    background-color: #aed6f1;
 }
 
 /* ======= BOTONES FICHAR ======= */
@@ -210,7 +210,7 @@ th {
 
 .botones-fichar button:hover,
 .botones-descanso button:hover {
-    background-color: #3498db;
+    background-color: #aed6f1;
 }
 
 /* ======= INFO SECTION ======= */
@@ -322,7 +322,7 @@ th {
         left: 0;
         width: 100%;
         flex-direction: column;
-        background-color: #2c3e50;
+        background-color: #5dade2;
         z-index: 1000;
     }
 
@@ -402,8 +402,8 @@ th {
 
 .login-body button {
     width: 100%;
-    background-color: #2c3e50;
-    color: white;
+    background-color: #5dade2;
+    color: midnightblue;
     padding: 12px;
     border: none;
     border-radius: 4px;
@@ -415,7 +415,7 @@ th {
 }
 
 .login-body button:hover {
-    background-color: #34495e;
+    background-color: #7fb3d5;
 }
 
 .login-body #error {
