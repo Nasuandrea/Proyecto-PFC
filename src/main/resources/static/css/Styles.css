@@ -103,9 +103,14 @@ th {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding:4px 20px;
 }
 .header h1 {
     margin: 0;
+}
+
+.header-logo {
+    height: 80px;
 }
 
 #mensaje-usuario {
@@ -379,6 +384,12 @@ th {
     width: 100%;
 }
 
+.login-logo {
+    display: block;
+    margin: 0 auto 15px;
+    width: 300px;
+}
+
 .login-body input {
     width: 100%;
     padding: 12px;
@@ -422,8 +433,8 @@ th {
 }
 
 .profile-icon {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
 }
 
 .profile-dropdown {
