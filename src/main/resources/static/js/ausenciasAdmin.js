@@ -43,11 +43,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (a.estado === "PENDIENTE") {
                     const aprobarBtn = document.createElement("button");
                     aprobarBtn.textContent = "Aprobar";
+                    aprobarBtn.classList.add("btn-save");
                     aprobarBtn.onclick = () => aprobarAusencia(a.id);
                     accionesTd.appendChild(aprobarBtn);
 
                     const rechazarBtn = document.createElement("button");
                     rechazarBtn.textContent = "Rechazar";
+                    rechazarBtn.classList.add("btn-cancel");
                     rechazarBtn.onclick = () => rechazarAusencia(a.id);
                     accionesTd.appendChild(rechazarBtn);
                 } else {
