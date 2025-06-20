@@ -10,10 +10,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const lista = document.getElementById("listaUsuarios");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const nuevoBtn = document.getElementById("nuevoBtn");
     const searchInput = document.getElementById("searchTrabajadores");
     const proyectosSelect = document.getElementById("proyectosDisponibles");
     const proyectosAsignadosLista = document.getElementById("proyectosAsignados");
     const activoSelect = document.getElementById("activo");
+
+    form.style.display = "none";
 
     let editando = false;
 
@@ -37,6 +40,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 fila.style.display = "none";
             }
         });
+    });
+
+    nuevoBtn.addEventListener("click", () => {
+        form.reset();
+        proyectosAsignadosLista.innerHTML = "";
+        cargarProyectos();
+        guardarBtn.textContent = "Crear usuario";
+        cancelarBtn.style.display = "inline-block";
+        form.style.display = "block";
+        editando = false;
     });
 
     form.addEventListener("submit", async (e) => {
@@ -81,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             form.reset();
+            form.style.display = "none";
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Crear usuario";
             editando = false;
@@ -92,6 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cancelarBtn.addEventListener("click", () => {
         form.reset();
+        form.style.display = "none";
         editando = false;
         cancelarBtn.style.display = "none";
         guardarBtn.textContent = "Crear usuario";
@@ -212,6 +227,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";
+        form.style.display = "block";
         editando = true;
 
         try {

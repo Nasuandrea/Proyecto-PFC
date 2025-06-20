@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cancelarBtn = document.getElementById("cancelarBtn");
     const crearBtn = document.getElementById("crearBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const nuevoBtn = document.getElementById("nuevoBtn");
     const horasEstimadasInput = document.getElementById("horasEstimadas");
     const horasTotalesInput = document.getElementById("horasTotales");
     const observacionesRow = document.getElementById("observacionesRow");
@@ -31,12 +32,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const trabajadoresLista = document.getElementById("trabajadoresAsignados");
     const asignarTrabajadorBtn = document.getElementById("asignarTrabajadorBtn");
 
+    form.style.display = "none";
+
     crearBtn.style.display = "inline-block";
     guardarBtn.style.display = "none";
     cancelarBtn.style.display = "none";
     horasTotalesInput.style.display = "none";
 
     asignarTrabajadorBtn.addEventListener("click", asignarTrabajador);
+
+    nuevoBtn.addEventListener("click", () => {
+        form.reset();
+        trabajadoresLista.innerHTML = "";
+        trabajadoresSelect.innerHTML = '<option value="">Seleccionar Trabajador</option>';
+        crearBtn.style.display = "inline-block";
+        guardarBtn.style.display = "none";
+        cancelarBtn.style.display = "inline-block";
+        observacionesRow.style.display = "none";
+        horasTotalesInput.style.display = "none";
+        form.style.display = "block";
+        editando = false;
+        editId = null;
+    });
 
     let editando = false;
     let editId = null;
@@ -88,6 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             form.reset();
+            form.style.display = "none";
             observacionesInput.value = "";
             cancelarBtn.style.display = "none";
             crearBtn.style.display = "inline-block";
@@ -103,6 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cancelarBtn.addEventListener("click", () => {
         form.reset();
+        form.style.display = "none";
         editando = false;
         editId = null;
         crearBtn.style.display = "inline-block";
@@ -242,6 +261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         crearBtn.style.display = "none";
         guardarBtn.style.display = "inline-block";
         cancelarBtn.style.display = "inline-block";
+        form.style.display = "block";
         observacionesRow.style.display = "flex";
         editando = true;
         editId = proyecto.id;

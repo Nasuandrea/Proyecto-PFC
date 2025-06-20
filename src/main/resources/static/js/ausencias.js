@@ -7,14 +7,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById("solicitarAusenciaForm");
     const cancelarBtn = document.getElementById("cancelarBtn");
     const guardarBtn = document.getElementById("guardarBtn");
+    const nuevoBtn = document.getElementById("nuevoBtn");
     const ausenciaIdInput = document.getElementById("ausenciaId");
     const tablaPendientes = document.querySelector("#tablaPendientes tbody");
     const tablaAprobadas = document.querySelector("#tablaAprobadas tbody");
     const tablaRechazadas = document.querySelector("#tablaRechazadas tbody");
 
+    form.style.display = "none";
+
     let editando = false;
 
     cargarAusencias();  // Cargar las ausencias cuando se cargue la página
+
+    nuevoBtn.addEventListener("click", () => {
+        form.reset();
+        cancelarBtn.style.display = "inline-block";
+        guardarBtn.textContent = "Solicitar Ausencia";
+        form.style.display = "block";
+        editando = false;
+    });
 
     // Manejo del formulario para solicitar una ausencia
     form.addEventListener("submit", async (e) => {
@@ -52,6 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             form.reset();
+            form.style.display = "none";
             cancelarBtn.style.display = "none";
             guardarBtn.textContent = "Solicitar Ausencia";
             editando = false;
@@ -176,6 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("motivo").value = a.motivo;
         guardarBtn.textContent = "Guardar cambios";
         cancelarBtn.style.display = "inline-block";
+        form.style.display = "block";
         editando = true;
     }
 
@@ -194,6 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cancelarBtn.addEventListener("click", () => {
         form.reset();
+        form.style.display = "none";
         cancelarBtn.style.display = "none";
         guardarBtn.textContent = "Solicitar Ausencia";
         editando = false;

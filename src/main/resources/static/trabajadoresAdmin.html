@@ -15,8 +15,10 @@
     <div class="contenedor-principal">
         <h1 id="formTitle">Gestionar Trabajadores</h1>
 
+        <button type="button" id="nuevoBtn">Nuevo Trabajador</button>
+
         <!-- Formulario para crear o editar trabajador -->
-        <form id="crearUsuarioForm" class="styled-form">
+        <form id="crearUsuarioForm" class="styled-form" style="display:none;">
             <input type="hidden" id="usuarioId">
 
             <div class="form-row">
@@ -74,7 +76,7 @@
 
         <!-- Cuadro de búsqueda de trabajadores -->
         <div class="search-box">
-            <input type="text" id="searchTrabajadores" placeholder="Buscar trabajador por nombre, apellidos o ID" />
+            <input type="text" id="searchTrabajadores" placeholder="Buscador" />
         </div>
 
         <!-- Lista de trabajadores -->
